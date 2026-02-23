@@ -3863,7 +3863,7 @@ Crannies have 20% less capacity against teuton raids with hero + 10-20% from any
     {
         $multiplier = ceil(getGame('movement_speed_increase') / 50);
         $speed = min(getGameSpeed(), 10);
-        $n = round(pow($cp / 1600 * $speed / $multiplier, 1 / 2.3) + 1, 1, -2);
+        $n = round(pow($cp / 1600 * $speed / $multiplier, 1 / 2.3) + 1, 1);
         $n = floor($n);
         if ($cp < self::newVillageCP($n)) {
             $n--;
