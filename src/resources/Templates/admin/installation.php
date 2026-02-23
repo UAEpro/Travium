@@ -79,6 +79,7 @@ if (isset($vars['installQueued']) && $vars['installQueued']): ?>
                     data['instantFinishTraining'] = getInputValueByName('instantFinishTraining');
                     data['buyAdventure'] = getInputValueByName('buyAdventure');
                     data['activation'] = getInputValueByName('activation');
+                    data['serverStyle'] = getInputValueByName('serverStyle');
 
                     $.ajax({
                         method: "POST",
@@ -206,6 +207,16 @@ if (isset($vars['installQueued']) && $vars['installQueued']): ?>
                         <select class="fm" name="serverHidden">
                             <?php foreach ($vars['data']['serverHidden'] as $key => $value): ?>
                                 <option value="<?= $key; ?>" <?= ($key == $vars['formData']['serverHidden'] ? 'selected' : ''); ?>><?= $value; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Server style</td>
+                    <td>
+                        <select class="fm" name="serverStyle">
+                            <?php foreach ($vars['data']['serverStyle'] as $key => $value): ?>
+                                <option value="<?= $key; ?>" <?= ($key == $vars['formData']['serverStyle'] ? 'selected' : ''); ?>><?= $value; ?></option>
                             <?php endforeach; ?>
                         </select>
                     </td>
@@ -364,15 +375,16 @@ if (isset($vars['installQueued']) && $vars['installQueued']): ?>
     <?php endif; ?>
 </div>
 <br/>
-<table id="profile" style="width: 700px;">
+<table id="profile" style="width: 800px;">
     <thead>
     <tr>
-        <th colspan="8">Servers</th>
+        <th colspan="9">Servers</th>
     </tr>
     <tr>
         <td style="width: 45px;">ID</td>
         <td style="width: 30px;">WID</td>
         <td style="width: 125px;">Name</td>
+        <td style="width: 65px;">Style</td>
         <td style="width: 75px;">Status</td>
         <td style="width: 75px;">Engine</td>
         <td style="width: 75px">Action</td>
@@ -383,7 +395,7 @@ if (isset($vars['installQueued']) && $vars['installQueued']): ?>
     <tbody>
     <?php if (sizeof($vars['gameWorlds']) <= 0): ?>
         <tr>
-            <td colspan="8" style="text-align: center">No game worlds found.</td>
+            <td colspan="9" style="text-align: center">No game worlds found.</td>
         </tr>
     <?php else: ?>
         <?php foreach ($vars['gameWorlds'] as $gameWorld): ?>
@@ -391,6 +403,13 @@ if (isset($vars['installQueued']) && $vars['installQueued']): ?>
                 <td style="text-align: center"><?= $gameWorld['id']; ?></td>
                 <td style="width: 30px; text-align: center"><?= $gameWorld['worldId']; ?></td>
                 <td style="width: 125px; text-align: center; overflow: hidden"><?= $gameWorld['name']; ?></td>
+                <td style="width: 65px; text-align: center">
+                    <?php
+                    $style = isset($gameWorld['serverStyle']) ? $gameWorld['serverStyle'] : 'modern';
+                    $styleColor = $style === 'classic' ? '#8B4513' : '#2196F3';
+                    echo '<span style="color: ' . $styleColor . '; font-weight: bold">' . ucfirst($style) . '</span>';
+                    ?>
+                </td>
                 <td style="width: 75px; text-align: center">
                     <?php
                     if ($gameWorld['finished'] == 1) {

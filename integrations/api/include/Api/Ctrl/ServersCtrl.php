@@ -92,6 +92,7 @@ class ServersCtrl extends ApiAbstractCtrl
             'registerClosed' => $row['registerClosed'] == 1,
             'finished' => $row['finished'] == 1,
             'finishTrainingEnabled' => false, //$info['finishTrainingEnabled']
+            'serverStyle' => isset($row['serverStyle']) ? $row['serverStyle'] : 'modern',
         ];
         return $server;
     }

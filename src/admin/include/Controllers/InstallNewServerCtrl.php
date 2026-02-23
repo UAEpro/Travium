@@ -165,6 +165,10 @@ class InstallNewServerCtrl
                 172800 => '2 days later',
                 604800 => 'a week later',
             ],
+            'serverStyle' => [
+                'modern' => 'Modern (T4.5)',
+                'classic' => 'Classic (T3.6)',
+            ],
         ],
         'formData' => [
             'speed' => 5000,
@@ -191,6 +195,7 @@ class InstallNewServerCtrl
             'activation' => 0,
             'auto_reinstall' => 0,
             'auto_reinstall_start_after' => 86400,
+            'serverStyle' => 'modern',
         ],
         'installQueued' => false,
         'deletionQueued' => false,
@@ -482,6 +487,13 @@ class InstallNewServerCtrl
         $this->vars['formData']['buyAdventure'] = isset($_POST['buyAdventure']) && $_POST['buyAdventure'] == 1 ? 1 : 0;
         $this->vars['formData']['instantFinishTraining'] = isset($_POST['instantFinishTraining']) && $_POST['instantFinishTraining'] == 1 ? 1 : 0;
         $this->vars['formData']['needPreregistrationCode'] = isset($_POST['needPreregistrationCode']) && $_POST['needPreregistrationCode'] == 1 ? 1 : 0;
+        if (isset($_POST['serverStyle'])) {
+            $this->vars['formData']['serverStyle'] = trim($_POST['serverStyle']);
+            if (!in_array($_POST['serverStyle'], array_keys($this->vars['data']['serverStyle']))) {
+                $this->vars['errors'][] = 'Server style is invalid.';
+                $errors++;
+            }
+        }
         return $errors;
     }
 }

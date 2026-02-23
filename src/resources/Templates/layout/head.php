@@ -80,6 +80,7 @@ use Core\Helper\PreferencesHelper;
         Travian.Game.version = '4.4';
         Travian.Game.worldId = '<?=getWorldId();?>';
         Travian.Game.speed = <?=getGameSpeed();?>;
+        Travian.Game.serverStyle = '<?=get_server_style();?>';
         Travian.Game.country = '<?=get_language_properties('country'); ?>';
         Travian.Templates = {};
         Travian.Templates.ButtonTemplate = '<?=$buttonTemplate;?>';

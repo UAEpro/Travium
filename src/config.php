@@ -87,6 +87,7 @@ $config = (object)[
         'worldUniqueId'      => 0,
         'indexUrl'           => $globalConfig['staticParameters']['indexUrl'],
         'global_css_class'   => $globalConfig['staticParameters']['global_css_class'],
+        'serverStyle'        => isset($connection['serverStyle']) ? $connection['serverStyle'] : 'modern',
         'gameWorldUrl'       => $connection['gameWorldUrl'],
         'default_language'   => $globalConfig['staticParameters']['default_language'],
         'selectedLang'       => $globalConfig['staticParameters']['default_language'],

@@ -28,6 +28,9 @@ class ConfigurationDetailsCtrl
         $this->addInfo($params['content'], 'Speed', getGameSpeed());
         $this->addInfo($params['content'], 'Movement speed', getGame("movement_speed_increase"));
         $this->addInfo($params['content'], 'Map size', MAP_SIZE . 'x' . MAP_SIZE);
+        $serverStyle = isset($config->settings->serverStyle) ? $config->settings->serverStyle : 'modern';
+        $styleLabel = $serverStyle === 'classic' ? '<span style="color: #8B4513; font-weight: bold">Classic (T3.6)</span>' : '<span style="color: #2196F3; font-weight: bold">Modern (T4.5)</span>';
+        $this->addInfo($params['content'], 'Server style', $styleLabel);
         $this->addInfo($params['content'], 'Min distance', round(Formulas::getMapMinDistanceFromCenter(), 1));
         $this->addInfo($params['content'], 'Storage multiplier', getGame("storage_multiplier"));
         $startTimeUtc = gmdate('Y-m-d\TH:i', $config->game->start_time);
