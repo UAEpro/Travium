@@ -62,11 +62,13 @@ class RegisterCtrl extends ApiAbstractCtrl
             }
         }
         $this->response['success'] = false;
-        $recaptcha = new \ReCaptcha\ReCaptcha($globalConfig['staticParameters']['recaptcha_private_key']);
-        $resp = $recaptcha->verify($this->payload['captcha'], WebService::ipAddress());
-        if (!$resp->isSuccess()) {
-            $this->response['fields']['captcha'] = 'invalidCaptcha';
-            return;
+        if (!empty($globalConfig['staticParameters']['recaptcha_private_key'])) {
+            $recaptcha = new \ReCaptcha\ReCaptcha($globalConfig['staticParameters']['recaptcha_private_key']);
+            $resp = $recaptcha->verify($this->payload['captcha'] ?? '', WebService::ipAddress());
+            if (!$resp->isSuccess()) {
+                $this->response['fields']['captcha'] = 'invalidCaptcha';
+                return;
+            }
         }
         $activation = $this->getActivationByActivationCode((int)$this->payload['gameWorld'], $this->payload['activationCode']);
         if ($activation) {

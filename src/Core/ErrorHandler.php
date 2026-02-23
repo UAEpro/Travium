@@ -14,7 +14,7 @@ class ErrorHandler
 
     public function __construct()
     {
-        error_reporting(E_ALL & ~E_NOTICE | E_STRICT);
+        error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
         ini_set('display_errors', IS_DEV);
         set_error_handler([$this, 'handleErrors']);
         register_shutdown_function([$this, 'handleFatalErrors']);
@@ -73,7 +73,6 @@ class ErrorHandler
         switch ($errNumber) {
             case E_WARNING      :
             case E_USER_WARNING :
-            case E_STRICT       :
             case E_NOTICE       :
             case E_USER_NOTICE  :
                 $type = 'warning';

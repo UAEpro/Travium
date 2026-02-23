@@ -52,7 +52,7 @@ class DB
     public function real_connect($host = null, $username = null, $passwd = null, $dbname = null, $port = null, $socket = null)
     {
         $this->mysqli = new \mysqli($host, $username, $passwd, $dbname, $port, $socket);
-        $status = $this->mysqli->ping();
+        $status = !$this->mysqli->connect_errno;
         if ($status) {
             $this->set_charset("utf8");
         }

@@ -86,6 +86,9 @@ function ConvertToUTF8($text)
 function recaptcha_check_answer()
 {
     global $globalConfig;
+    if (empty($globalConfig['staticParameters']['recaptcha_private_key'])) {
+        return true;
+    }
     if (isset($_POST["g-recaptcha-response"])) {
         $reCaptcha = new ReCaptcha($globalConfig['staticParameters']['recaptcha_private_key']);
         $resp = $reCaptcha->verifyResponse(
@@ -100,6 +103,9 @@ function recaptcha_check_answer()
 function recaptcha_get_html($callback = null)
 {
     global $globalConfig;
+    if (empty($globalConfig['staticParameters']['recaptcha_public_key'])) {
+        return '';
+    }
     $HTML = '<script src=\'https://www.google.com/recaptcha/api.js?hl=en\'></script>';
     $HTML .= '<div class="g-recaptcha" ' . (empty($callback) ? '' : 'data-callback="' . $callback . '" ') . 'data-lang="en" data-theme="custom" data-sitekey="' . $globalConfig['staticParameters']['recaptcha_public_key'] . '"></div>';
     return $HTML;
@@ -126,7 +132,7 @@ function make_seed()
 {
     list($usec, $sec) = explode(' ', microtime());
 
-    return (float)$sec + ((float)$usec * 100000);
+    return (int)((float)$sec + ((float)$usec * 100000));
 }
 
 function calculate_dailyquest_bonus($x, $type)

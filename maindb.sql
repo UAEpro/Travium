@@ -310,6 +310,7 @@ ALTER TABLE `email_blacklist`
 
 ALTER TABLE `gameServers`
   ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `worldId_unique` (`worldId`),
   ADD KEY `search` (`finished`,`registerClosed`,`hidden`);
 
 ALTER TABLE `goldProducts`
@@ -476,6 +477,18 @@ ALTER TABLE `transactions`
 
 ALTER TABLE `voting_log`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+CREATE TABLE `admin_users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(100) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `role` enum('super','admin') NOT NULL DEFAULT 'admin',
+  `created_at` int(10) UNSIGNED NOT NULL,
+  `last_login` int(10) UNSIGNED DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

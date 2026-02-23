@@ -125,7 +125,7 @@ class DB
     public function real_connect($host = NULL, $username = NULL, $passwd = NULL, $dbname = NULL, $port = NULL, $socket = NULL)
     {
         $this->mysqli = new \mysqli($host, $username, $passwd, $dbname, $port, $socket);
-        $status = $this->mysqli->ping();
+        $status = !$this->mysqli->connect_errno;
         if ($status) {
             $this->set_charset("utf8");
             $this->lastPing = time();
@@ -140,7 +140,11 @@ class DB
 
     public function ping()
     {
-        return $this->mysqli->ping();
+        try {
+            return $this->mysqli->query('SELECT 1') !== false;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
     public function checkConnection($force = false)

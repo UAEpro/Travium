@@ -1324,7 +1324,7 @@ HTML;
 
     public function recalculateBuildingTimes(){
         usort($this->onLoadBuildings['normal'], function($a, $b){
-            return $a['id'] == $b['id'] ? 0 : $a['id'] > $b['id'] ? 1 : -1;
+            return $a['id'] <=> $b['id'];
         });
         $tmp = [];
         $lastCommence = [

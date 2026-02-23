@@ -504,7 +504,7 @@ class Session
 
     public function getQuestBattle()
     {
-        return $this->data['qst_battle'];
+        return $this->data['qst_battle'] ?? '';
     }
 
     public function setQuestBattle($value)
@@ -514,7 +514,7 @@ class Session
 
     public function getQuestWorld()
     {
-        return $this->data['qst_world'];
+        return $this->data['qst_world'] ?? '';
     }
 
     public function updatePackageCodeTry($zero = false)
@@ -596,7 +596,7 @@ class Session
 
     public function getQuestEconomy()
     {
-        return $this->data['qst_economy'];
+        return $this->data['qst_economy'] ?? '';
     }
 
     public function setQuestEconomy($value)
@@ -1054,7 +1054,7 @@ class Session
 
     public function getSuccessAdventuresCount()
     {
-        return $this->data['success_adventures_count'];
+        return $this->data['success_adventures_count'] ?? 0;
     }
 
     public function hasPlus()

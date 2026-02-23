@@ -30,7 +30,7 @@ class Caching
             }
             try {
                 $redis = new Redis();
-                $redis->connect("127.0.0.1");
+                $redis->connect(getenv('REDIS_HOST') ?: '127.0.0.1');
                 $redis->setOption(Redis::OPT_PREFIX, $key);
                 self::$instance = $redis;
             } catch (\Exception $e) {

@@ -47,12 +47,12 @@ $mainDb = [
     'charset'  => $globalConfig['dataSources']['globalDB']['charset'] ?? 'utf8mb4',
 ];
 
-// Defaults
+// Defaults (reads from env vars when available, e.g. Docker)
 $defaults = [
-    'db_host'                 => 'localhost',
-    'db_user'                 => '',
-    'db_name'                 => '',
-    'db_password'             => '',
+    'db_host'                 => getenv('GAME_DB_HOST') ?: (getenv('DB_HOST') ?: 'localhost'),
+    'db_user'                 => getenv('GAME_DB_USER') ?: (getenv('MYSQL_USER') ?: ''),
+    'db_name'                 => getenv('GAME_DB_NAME') ?: 'travium_s1',
+    'db_password'             => getenv('GAME_DB_PASSWORD') ?: (getenv('MYSQL_PASSWORD') ?: ''),
     'worldId'                 => 's1',
     'serverName'              => 'x50000',
     'speed'                   => 50000,
@@ -75,7 +75,7 @@ $defaults = [
     'auto_reinstall'          => 0,
     'auto_reinstall_start_after' => 86400,
     'startTimeDT'             => (new DateTime('+1 hour'))->format('Y-m-d\TH:i'),
-    'admin_password'          => '',
+    'admin_password'          => getenv('GAME_ADMIN_PASSWORD') ?: '',
 ];
 
 // AJAX: check if world path exists
@@ -214,7 +214,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
       	
         try {
-            // Connect PDOs
+            // Auto-create game world database if it doesn't exist
+            $safeDbName = preg_replace('/[^a-zA-Z0-9_]/', '', $input['db_name']);
+            $tmpPdo = new PDO(
+                "mysql:host={$input['db_host']};charset=utf8mb4",
+                $input['db_user'],
+                $input['db_password'],
+                [ PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION ]
+            );
+            $tmpPdo->exec("CREATE DATABASE IF NOT EXISTS `{$safeDbName}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+            $tmpPdo = null;
+
+            // Connect to the game world database
             $db = new PDO(
                 "mysql:host={$input['db_host']};dbname={$input['db_name']};charset=utf8mb4",
                 $input['db_user'],
@@ -359,8 +370,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Run installer + updater via CLI
             $adminPass = $input['admin_password'];
-            $cmd1 = "/usr/bin/php7.3 $installerFile install " . escapeshellarg($adminPass);
-            $cmd2 = "/usr/bin/php7.3 $updateFile";
+            $phpBin = PHP_BINDIR . '/php';
+            $cmd1 = "$phpBin $installerFile install " . escapeshellarg($adminPass);
+            $cmd2 = "$phpBin $updateFile";
 
             [$out1,$code1] = run_cmd($cmd1);
             [$out2,$code2] = run_cmd($cmd2);
@@ -579,14 +591,14 @@ function run_cmd(string $cmd): array {
                             <input name="db_user" type="text" value="<?=htmlspecialchars($_POST['db_user'] ?? $defaults['db_user'])?>">
                         </div>
                         <div>
-                            <label>DB Name</label>
-                            <input name="db_name" type="text" value="<?=htmlspecialchars($_POST['db_name'] ?? $defaults['db_name'])?>">
+                            <label>DB Name (auto from World ID)</label>
+                            <input id="dbName" name="db_name" type="text" value="<?=htmlspecialchars($_POST['db_name'] ?? $defaults['db_name'])?>">
                         </div>
                     </div>
                     <label>DB Password</label>
                     <input name="db_password" type="password" value="<?=htmlspecialchars($_POST['db_password'] ?? $defaults['db_password'])?>">
 
-                    <div class="hint">Main DB is read from config.php and not editable here.</div>
+                    <div class="hint">Database is created automatically. Main DB is read from config.php.</div>
                 </div>
 
                 <div class="panel">
@@ -711,9 +723,16 @@ function run_cmd(string $cmd): array {
   let worldExists = false;
   let pendingCheck = null;
 
+  const dbNameEl = document.getElementById('dbName');
+  let dbNameManuallyEdited = false;
+  dbNameEl && dbNameEl.addEventListener('input', () => { dbNameManuallyEdited = true; });
+
   function updateUrl() {
     const w = sanitize(worldIdEl.value);
     urlPrev.textContent = `https://${w}.${host}/`;
+    if (!dbNameManuallyEdited && dbNameEl && w) {
+      dbNameEl.value = 'travium_' + w.replace(/-/g, '_');
+    }
     scheduleExistCheck(w);
   }
 

@@ -4119,7 +4119,7 @@ Crannies have 20% less capacity against teuton raids with hero + 10-20% from any
         $angle = atan2($y, $x);
         $r = hypot($x, $y);
         $half = $max_distance / 2;
-        $pointRadius = mt_rand($r - $half, $r + $half);
+        $pointRadius = mt_rand((int)($r - $half), (int)($r + $half));
         $point = [
             'x' => ceil(cos($angle) * $pointRadius),
             'y' => ceil(sin($angle) * $pointRadius),
