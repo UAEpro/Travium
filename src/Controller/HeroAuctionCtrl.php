@@ -69,7 +69,7 @@ class HeroAuctionCtrl extends GameCtrl
             }
         }
         $action = !isset($_REQUEST['action']) || !in_array($_REQUEST['action'],
-            ['buy', 'sell', 'bids', 'accounting',]) ? 'buy' : filter_var($_REQUEST['action'], FILTER_SANITIZE_STRING);
+            ['buy', 'sell', 'bids', 'accounting',]) ? 'buy' : sanitize_string($_REQUEST['action']);
         //adding menus.
         $view = new PHPBatchView("hero/AuctionMenu");
         $view->vars['action'] = $action;
@@ -403,7 +403,7 @@ class HeroAuctionCtrl extends GameCtrl
                     }
                     $amounts = heroAuction::getPackagesForItemTypeId($item['type']);
                     $find = FALSE;
-                    for ($i = 0; $i <= sizeof($amounts) - 1; ++$i) {
+                    for ($i = 0; $i <= count($amounts) - 1; ++$i) {
                         if ($amounts[$i] == $amount) {
                             $find = $amounts[$i];
                             break;

@@ -23,7 +23,7 @@ class RallyPointHTML
         } else {
             $HTML .= '<a href="karte.php?d=' . $row['owner']['kid'] . '">' . $row['owner']['villageName'] . '</a>';
         }
-        $size = sizeof($row['units']);
+        $size = count($row['units']);
         if (isset($row['units'][98]) && $noHeroWhenZero && $row['units'][98] == 0) {
             $size--;
         }
@@ -175,21 +175,21 @@ class RallyPointHTML
                         $HTML .= ' <select name="ctar' . $i . '" class="dropdown">';
                         if ($i == 2) $HTML .= '<option value="0"> - </option>';
                         $HTML .= '<option value="99">' . T("RallyPoint", "random") . '</option>';
-                        if (sizeof($resources)) {
+                        if (count($resources)) {
                             $HTML .= '<optgroup label="' . T("Buildings", "newBuilding.Resources") . '">';
                             foreach ($resources as $res) {
                                 $HTML .= '<option value="' . $res . '">' . T("Buildings", "{$res}.title") . '</option>';
                             }
                             $HTML .= '</optgroup>';
                         }
-                        if (sizeof($pishNiaz)) {
+                        if (count($pishNiaz)) {
                             $HTML .= '<optgroup label="' . T("Buildings", "newBuilding.Infrastructure") . '">';
                             foreach ($pishNiaz as $res) {
                                 $HTML .= '<option value="' . $res . '">' . T("Buildings", "{$res}.title") . '</option>';
                             }
                             $HTML .= '</optgroup>';
                         }
-                        if (sizeof($military)) {
+                        if (count($military)) {
                             $HTML .= '<optgroup label="' . T("Buildings", "newBuilding.Military") . '">';
                             foreach ($military as $res) {
                                 $HTML .= '<option value="' . $res . '">' . T("Buildings", "{$res}.title") . '</option>';

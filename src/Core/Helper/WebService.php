@@ -58,7 +58,7 @@ class WebService
             $dir = str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
             $core = preg_split('@/@',
                 str_replace($_SERVER['DOCUMENT_ROOT'], '', realpath(dirname(__FILE__))),
-                NULL,
+                -1,
                 PREG_SPLIT_NO_EMPTY);
             $core = $core[0];
             $tmplt = $atRoot ? ($atCore ? "%s://%s/%s/" : "%s://%s/") : ($atCore ? "%s://%s/%s/" : "%s://%s%s");

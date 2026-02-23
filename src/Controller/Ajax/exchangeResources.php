@@ -13,7 +13,7 @@ class exchangeResources extends AjaxBase
 {
     public function dispatch()
     {
-        if (isset($_POST['did']) && isset($_POST['desired']) && is_array($_POST['desired']) && sizeof($_POST['desired']) == 4) {
+        if (isset($_POST['did']) && isset($_POST['desired']) && is_array($_POST['desired']) && count($_POST['desired']) == 4) {
             $resObj = (array)$_POST['desired'];
             $current_resources = Village::getInstance()->getCurrentResources();
             if (!is_array($resObj) || !isset($resObj[0])) {

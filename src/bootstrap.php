@@ -96,7 +96,7 @@ function check_ip_access()
             $banned = GlobalDB::getInstance()->query("SELECT * FROM banIP WHERE ip='$ip' AND (blockTill=0 OR blockTill > " . time() . ")");
             $cache->set("IPCheck:$ip", $banned->num_rows ? $banned->fetch_assoc() : [], 1440);
         }
-        if (is_array($banned) && sizeof($banned) > 1) {
+        if (is_array($banned) && count($banned) > 1) {
             exit("You are not allowed to access here.");
         }
     }

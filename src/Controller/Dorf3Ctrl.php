@@ -169,7 +169,7 @@ class Dorf3Ctrl extends GameCtrl
             $content .= '<td class="tro">';
             if ($this->allowed()) {
                 $training = $m->getVillageTroopsTraining($row['kid']);
-                if (!sizeof($training)) {
+                if (!count($training)) {
                     $content .= '<span class="errorMessage">-</span>';
                 } else {
                     foreach ($training as $item_id => $a) {

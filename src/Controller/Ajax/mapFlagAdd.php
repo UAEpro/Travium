@@ -30,7 +30,7 @@ class mapFlagAdd extends AjaxBase
             $this->response['errorMsg'] = T("map", "colour_does_not_exists");
             return;
         }
-        $data['text'] = isset($data['text']) ? filter_var($data['text'], FILTER_SANITIZE_STRING) : '';
+        $data['text'] = isset($data['text']) ? sanitize_string($data['text']) : '';
         if($data['text'] == "") {
             $this->response['error'] = TRUE;
             $this->response['errorMsg'] = T("map", "please_resend_all_data");

@@ -26,7 +26,7 @@ class ReturnProcessor
                     $modify[] = "u{$i}=u{$i}+" . $row['u' . $i];
                 }
             }
-            if (sizeof($modify)) {
+            if (count($modify)) {
                 $db->query("UPDATE units SET " . implode(",", $modify) . " WHERE kid={$row['to_kid']}");
                 if ($row['kid'] != 0) {
                     $db->query("UPDATE vdata SET lastReturn=" . $row['end_time_seconds'] . " WHERE kid={$row['to_kid']}");

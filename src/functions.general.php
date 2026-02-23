@@ -11,6 +11,10 @@ use Core\Session;
 use Model\DailyQuestModel;
 use Model\Quest;
 
+function sanitize_string(?string $value): string {
+    return htmlspecialchars((string)($value ?? ''), ENT_QUOTES, 'UTF-8');
+}
+
 function imagecreatetransparent($width, $height)
 {
     $block = imagecreatetruecolor($width, $height);
@@ -730,6 +734,9 @@ function filemtime_remote_key($uri, $cacheKey)
         return $_cache;
     }
     $uri = parse_url($uri);
+    if (!isset($uri['host'])) {
+        return 0;
+    }
     $handle = @fsockopen($uri['host'], 80);
     if (!$handle) {
         return 0;

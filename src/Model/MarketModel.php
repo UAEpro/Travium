@@ -463,7 +463,7 @@ HTML;
 
         return $db->fetchScalar("SELECT COUNT(id) FROM market WHERE kid!=$kid
         AND IF(maxtime>0, IF(ROUND({$dist}/{$speed}) <= maxtime, TRUE, FALSE), TRUE)
-        AND IF(aid>0, IF(aid=$aid, TRUE, FALSE), TRUE) " . (sizeof($cond) ? 'AND ' . implode(" AND ", $cond) : ''));
+        AND IF(aid>0, IF(aid=$aid, TRUE, FALSE), TRUE) " . (count($cond) ? 'AND ' . implode(" AND ", $cond) : ''));
     }
 
     public function getOffers($page, $pageSize, $aid, $kid, $race, $rate, $needType, $wantType)
@@ -486,7 +486,7 @@ HTML;
 
         return $db->query("SELECT * FROM market WHERE
         kid!=$kid AND IF(maxtime>0, IF(ROUND({$dist}/{$speed}) <= maxtime, TRUE, FALSE), TRUE) AND IF(aid>0, IF(aid=$aid, TRUE, FALSE), TRUE)
-        " . (sizeof($cond) ? 'AND ' . implode(" AND ", $cond) : '') . " ORDER BY $dist LIMIT $LIMIT");
+        " . (count($cond) ? 'AND ' . implode(" AND ", $cond) : '') . " ORDER BY $dist LIMIT $LIMIT");
     }
 
 }

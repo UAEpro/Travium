@@ -1,7 +1,7 @@
 <?php
 if(isset($_GET['version'])){
 	$version = trim($_GET['version']);
-} else if(sizeof($argv) < 2){
+} else if(count($argv) < 2){
 	die("Please provide a version");
 } else {
 	$version = trim($argv[1]);

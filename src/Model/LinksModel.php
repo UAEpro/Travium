@@ -27,7 +27,7 @@ class LinksModel
 
 	public function addLink($uid, $name, $url, $pos)
 	{
-		$name = filter_var($name, FILTER_SANITIZE_STRING);
+		$name = sanitize_string($name);
 		$url = filter_var($url, FILTER_SANITIZE_URL);
 		if(strlen($name) > 30) {
 			return false;
@@ -45,7 +45,7 @@ class LinksModel
 
 	public function modifyLink($uid, $id, $name, $url, $pos)
 	{
-		$name = filter_var($name, FILTER_SANITIZE_STRING);
+		$name = sanitize_string($name);
 		$url = filter_var($url, FILTER_SANITIZE_URL);
 		if(strlen($name) > 30) {
 			return false;

@@ -79,7 +79,7 @@ class ReinforcementProcessor
                 if (!$redeployHero && $row['u11']) {
                     $modify[] = 'u11=u11+' . $row['u11'];
                 }
-                if (sizeof($modify)) {
+                if (count($modify)) {
                     $db->query("UPDATE enforcement SET " . implode(",", $modify) . " WHERE id=$enforceId");
                 }
             } else {

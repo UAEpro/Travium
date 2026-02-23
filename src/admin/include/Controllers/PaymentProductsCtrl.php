@@ -42,13 +42,13 @@ class PaymentProductsCtrl
             $params['locations_dropdown'] .= '<option value="' . $row['id'] . '" ' . ($params['product_location'] == $row['id'] ? 'selected' : '') . '>' . $row['location'] . '</option>';
         }
         if (WebService::isPost() && Session::validateChecker()) {
-            $params['product_name'] = filter_var($_POST['product_name'], FILTER_SANITIZE_STRING);
+            $params['product_name'] = sanitize_string($_POST['product_name']);
             $params['product_location'] = (int)$_POST['product_location'];
             $params['product_gold'] = (int)$_POST['product_gold'];
             $params['product_price'] = trim($_POST['product_price']);
             $params['product_offer'] = (int)$_POST['product_offer'];
-            $params['product_moneyUnit'] = filter_var($_POST['product_moneyUnit'], FILTER_SANITIZE_STRING);
-            $params['product_image'] = filter_var($_POST['product_image'], FILTER_SANITIZE_STRING);
+            $params['product_moneyUnit'] = sanitize_string($_POST['product_moneyUnit']);
+            $params['product_image'] = sanitize_string($_POST['product_image']);
             if (empty($params['product_name']) || empty($params['product_moneyUnit']) || empty($params['product_image'])) {
                 $params['error'] = 'Some inputs are empty';
             } else {
@@ -102,13 +102,13 @@ class PaymentProductsCtrl
             $params['locations_dropdown'] .= '<option value="' . $row['id'] . '" ' . ($params['product_location'] == $row['id'] ? 'selected' : '') . '>' . $row['location'] . '</option>';
         }
         if (WebService::isPost() && Session::validateChecker()) {
-            $params['product_name'] = filter_var($_POST['product_name'], FILTER_SANITIZE_STRING);
+            $params['product_name'] = sanitize_string($_POST['product_name']);
             $params['product_location'] = (int)$_POST['product_location'];
             $params['product_gold'] = (int)$_POST['product_gold'];
             $params['product_price'] = trim($_POST['product_price']);
             $params['product_offer'] = (int)$_POST['product_offer'];
-            $params['product_moneyUnit'] = filter_var($_POST['product_moneyUnit'], FILTER_SANITIZE_STRING);
-            $params['product_image'] = filter_var($_POST['product_image'], FILTER_SANITIZE_STRING);
+            $params['product_moneyUnit'] = sanitize_string($_POST['product_moneyUnit']);
+            $params['product_image'] = sanitize_string($_POST['product_image']);
             if (empty($params['product_name']) || empty($params['product_moneyUnit']) || empty($params['product_image'])) {
                 $params['error'] = 'Some inputs are empty';
             } else {

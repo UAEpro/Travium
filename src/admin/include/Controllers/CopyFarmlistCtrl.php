@@ -18,7 +18,7 @@ class CopyFarmlistCtrl
             $farms = rtrim($farms,',');
             $farms = array_unique(explode(",", $farms));
             $m = new FarmListModel();
-            if(sizeof($farms)){
+            if(count($farms)){
                 $uid = $db->fetchScalar("SELECT owner FROM vdata WHERE kid={$params['kid']}");
                 if($uid > 0){
                     $lid = $m->addFarmList($uid, $params['kid'], "Copied farmlist");

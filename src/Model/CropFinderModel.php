@@ -62,7 +62,7 @@ class CropFinderModel
         if ($only_free) {
             $cond[] = 'occupied=0';
         }
-        if (sizeof($cond)) {
+        if (count($cond)) {
             $cond = "WHERE " . implode(" AND ", $cond);
         } else {
             $cond = '';
@@ -91,7 +91,7 @@ class CropFinderModel
         }
         $pageSize = 50;
         $from = ($page - 1) * $pageSize;
-        if (sizeof($cond)) {
+        if (count($cond)) {
             $cond = "WHERE " . implode(" AND ", $cond);
         } else {
             $cond = '';

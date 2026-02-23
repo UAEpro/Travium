@@ -52,7 +52,7 @@ class WinnerCtrl
             } else {
                 $order[] = '-';
             }
-            $replace = str_replace("[DEFENDER]", $order[sizeof($order) - 1], $replace);
+            $replace = str_replace("[DEFENDER]", $order[count($order) - 1], $replace);
             $content .= vsprintf($replace, $order);
         } else {
             $replace = T("Global", "ServerFinishNoWinner");
@@ -79,7 +79,7 @@ class WinnerCtrl
             } else {
                 $order[] = '-';
             }
-            $replace = str_replace("[DEFENDER]", $order[sizeof($order) - 1], $replace);
+            $replace = str_replace("[DEFENDER]", $order[count($order) - 1], $replace);
             $order = array_map("trim", $order);
             $content .= vsprintf($replace, $order);
         }

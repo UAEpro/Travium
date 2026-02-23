@@ -34,7 +34,7 @@ class SendEmailCtrl
                         $to = [];
                     }
                 }
-                if (sizeof($to)) {
+                if (count($to)) {
                     Mailer::sendBatch($to, $params['subject'], $params['message']);
                 }
                 unset($to);

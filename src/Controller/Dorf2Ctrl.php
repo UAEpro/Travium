@@ -67,7 +67,7 @@ class Dorf2Ctrl extends GameCtrl
             return TRUE;
         }
         $session = $this->session;
-        $c = filter_var($_GET['c'], FILTER_SANITIZE_STRING);
+        $c = sanitize_string($_GET['c']);
         if ($c != $session->getChecker()) {
             return TRUE;
         }

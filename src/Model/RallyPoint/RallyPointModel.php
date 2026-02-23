@@ -69,7 +69,7 @@ class RallyPointModel
         if ($subFilters[6]) {
             $other[] = '(mode=0)';
         }
-        $other = sizeof($other) ? 'AND (' . implode(' OR ', $other) . ')' : null;
+        $other = count($other) ? 'AND (' . implode(' OR ', $other) . ')' : null;
         return $db->query("SELECT COUNT(id) FROM movement WHERE kid={$session->getKid()} $other")->fetch_assoc()['COUNT(id)'];
     }
 
@@ -119,7 +119,7 @@ class RallyPointModel
         if ($subFilters[6]) {
             $other[] = '(mode=0)';
         }
-        $other = sizeof($other) ? 'AND (' . implode(' OR ', $other) . ')' : null;
+        $other = count($other) ? 'AND (' . implode(' OR ', $other) . ')' : null;
         if ($subFilters[6]) {
             return $db->query("SELECT * FROM movement WHERE kid={$session->getKid()} $other ORDER BY end_time DESC LIMIT {$from}, {$session->getRallyPointRecordsPerPage()}");
         }
@@ -141,7 +141,7 @@ class RallyPointModel
         if ($subFilters[3]) {
             $other[] = '(mode=0 AND attack_type=' . MovementsModel::ATTACKTYPE_REINFORCEMENT . ')';
         }
-        $other = sizeof($other) ? 'AND (' . implode(' OR ', $other) . ')' : null;
+        $other = count($other) ? 'AND (' . implode(' OR ', $other) . ')' : null;
         $o = $this->oases;
         $o[] = $session->getKid();
         $o = implode(",", $o);
@@ -164,7 +164,7 @@ class RallyPointModel
         if ($subFilters[3]) {
             $other[] = '(mode=0 AND attack_type=' . MovementsModel::ATTACKTYPE_REINFORCEMENT . ')';
         }
-        $other = sizeof($other) ? 'AND (' . implode(' OR ', $other) . ')' : null;
+        $other = count($other) ? 'AND (' . implode(' OR ', $other) . ')' : null;
         $o = $this->oases;
         $o[] = $session->getKid();
         $o = implode(",", $o);

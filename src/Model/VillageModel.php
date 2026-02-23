@@ -253,7 +253,7 @@ class VillageModel
     public function removeTribeSpecificBuildings($kid)
     {
         $buildings = $this->getBuildingsAssoc($kid);
-        if (sizeof($buildings) == 0) {
+        if (count($buildings) == 0) {
             logError("No building. removeTribeSpecificBuildings");
             return;
         }
@@ -298,7 +298,7 @@ class VillageModel
         }
         //removing tribe specific buildings.
         $buildings = $this->getBuildingsAssoc($kid);
-        if (sizeof($buildings) == 0) {
+        if (count($buildings) == 0) {
             logError("No building. while capture village");
         }
         $tribeSpecificArray = [31, 32, 33, 42, 43, 44, 45, 35, 36, 41];

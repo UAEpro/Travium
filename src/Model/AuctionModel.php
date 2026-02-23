@@ -89,7 +89,7 @@ class AuctionModel
     {
         $time = time() - $spread_timeout;
         $db = DB::getInstance();
-        if (sizeof(self::$given_user_ids)) {
+        if (count(self::$given_user_ids)) {
             $uid = $db->fetchScalar("SELECT id FROM users WHERE id>2 AND access=1 AND last_login_time >= $time AND id NOT IN(" . implode(",",
                     self::$given_user_ids) . ") ORDER BY RAND() LIMIT 1");
         } else {
@@ -467,7 +467,7 @@ class AuctionModel
                     continue;
                 }
             }
-            $size = sizeof($amounts);
+            $size = count($amounts);
             $num = 1;
             if ($size > 1) {
                 $num = $amounts[mt_rand(0, max($size - 2, 1))];
@@ -527,6 +527,6 @@ class AuctionModel
     {
         $amounts = heroAuction::getPackagesFakeAuctionForItemTypeId($typeId);
         shuffle($amounts);
-        return $amounts[mt_rand(0, sizeof($amounts) - 1)];
+        return $amounts[mt_rand(0, count($amounts) - 1)];
     }
 }

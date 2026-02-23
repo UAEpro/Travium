@@ -75,7 +75,7 @@ class raidListSlots extends AjaxBase
         $view = new PHPBatchView("farmlist/ajaxFarmlist");
         $view->vars['lid'] = $list['id'];
         $view->vars['kid'] = $list['kid'];
-        $view->vars['numSlots'] = sizeof($slotsArray);
+        $view->vars['numSlots'] = count($slotsArray);
         $view->vars['name'] = $m->getVillage($list['kid'], 'name')['name'] . ' - ' . $list['name'];
         $view->vars['numRaids'] = 0;
         $view->vars['slots'] = '';

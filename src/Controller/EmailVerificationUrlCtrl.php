@@ -6,7 +6,6 @@ use Core\Database\DB;
 use Core\Session;
 use resources\View\OutOfGameView;
 use resources\View\PHPBatchView;
-use const FILTER_SANITIZE_STRING;
 
 class EmailVerificationUrlCtrl extends OutOfGameCtrl
 {
@@ -25,7 +24,7 @@ class EmailVerificationUrlCtrl extends OutOfGameCtrl
         if (!isset($_GET['code']) || empty($_GET['code'])) {
             $view->vars['codeEmpty'] = true;
         } else {
-            list($verifyId, $verifyCode) = explode("-", filter_var(trim($_GET['code']), FILTER_SANITIZE_STRING));
+            list($verifyId, $verifyCode) = explode("-", sanitize_string(trim($_GET['code'])));
             $result = $this->model->getVerificationById((int)$verifyId);
             if ($result->num_rows) {
                 $row = $result->fetch_assoc();

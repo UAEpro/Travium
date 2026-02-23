@@ -8,7 +8,7 @@ function handleBadHourReleaseTime($releaseTime, $badHours = [23, 00, 1, 2, 3, 4,
     if (in_array($releaseHour, $badHours)) {
         //it's a bad hour (we need to find first good hour after that
         if (in_array($releaseHour, [23, 00])) {
-            $hour = $good[sizeof($good) - 1]; // last hour
+            $hour = $good[count($good) - 1]; // last hour
             $releaseTime -= (($releaseHour == 00 ? 24 : $releaseHour) - $hour) * 3600;
         } else {
             $hour = $good[0]; // first hour after that time

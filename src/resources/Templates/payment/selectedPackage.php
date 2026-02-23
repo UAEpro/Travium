@@ -135,7 +135,7 @@ foreach ($vars['locations'] as $locationId => $location) {
 								<?php
     $url = $vars['img'];
     $ext = explode(".", $vars['img']);
-    $ext = $ext[sizeof($ext) - 1];
+    $ext = $ext[count($ext) - 1];
     if ($ext == 'gif') {
         $img = imagecreatefromgif($url);
     } else if ($ext == 'png') {

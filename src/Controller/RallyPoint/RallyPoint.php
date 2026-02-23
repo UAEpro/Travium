@@ -383,7 +383,7 @@ class RallyPoint extends RallyPointHTML
             $settlers = $db->fetchScalar("SELECT u10 FROM units WHERE kid=" . Village::getInstance()->getKid());
             if (Session::getInstance()->getCP() < Formulas::newVillageCP($total + 1)) {
                 //$result['error'] = true;
-                //$result['errorMsg'] = sprintf(T("RallyPoint", "Settlers", "notEnoughCulturePoints"), $session->cp, Metadata::getInstance()->get_new_village_cp_needed(sizeof($session->villages)));
+                //$result['errorMsg'] = sprintf(T("RallyPoint", "Settlers", "notEnoughCulturePoints"), $session->cp, Metadata::getInstance()->get_new_village_cp_needed(count($session->villages)));
                 return;
             } else if ($settlers < 3) {
                 //$result['error'] = true;
@@ -484,7 +484,7 @@ class RallyPoint extends RallyPointHTML
             $settlers = $db->fetchScalar("SELECT u10 FROM units WHERE kid=" . Village::getInstance()->getKid());
             if (Session::getInstance()->getCP() < Formulas::newVillageCP($total + 1)) {
                 //$result['error'] = true;
-                //$result['errorMsg'] = sprintf(T("RallyPoint", "Settlers", "notEnoughCulturePoints"), $session->cp, Metadata::getInstance()->get_new_village_cp_needed(sizeof($session->villages)));
+                //$result['errorMsg'] = sprintf(T("RallyPoint", "Settlers", "notEnoughCulturePoints"), $session->cp, Metadata::getInstance()->get_new_village_cp_needed(count($session->villages)));
                 return;
             } else if ($settlers < 3) {
                 //$result['error'] = true;

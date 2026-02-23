@@ -250,19 +250,19 @@ class Village
         if ($quest->getQuest("economy", 2) == 0) {
             //One of each to level 1
             $count1 = [
-                sizeof(array_filter($resource_levels[1],
+                count(array_filter($resource_levels[1],
                     function ($x) {
                         return $x >= 1;
                     })),
-                sizeof(array_filter($resource_levels[2],
+                count(array_filter($resource_levels[2],
                     function ($x) {
                         return $x >= 1;
                     })),
-                sizeof(array_filter($resource_levels[3],
+                count(array_filter($resource_levels[3],
                     function ($x) {
                         return $x >= 1;
                     })),
-                sizeof(array_filter($resource_levels[4],
+                count(array_filter($resource_levels[4],
                     function ($x) {
                         return $x >= 1;
                     })),
@@ -274,19 +274,19 @@ class Village
         if ($quest->getQuest("economy", 5) == 0) {
             //One of each to level 2
             $count2 = [
-                sizeof(array_filter($resource_levels[1],
+                count(array_filter($resource_levels[1],
                     function ($x) {
                         return $x >= 2;
                     })),
-                sizeof(array_filter($resource_levels[2],
+                count(array_filter($resource_levels[2],
                     function ($x) {
                         return $x >= 2;
                     })),
-                sizeof(array_filter($resource_levels[3],
+                count(array_filter($resource_levels[3],
                     function ($x) {
                         return $x >= 2;
                     })),
-                sizeof(array_filter($resource_levels[4],
+                count(array_filter($resource_levels[4],
                     function ($x) {
                         return $x >= 2;
                     })),
@@ -424,7 +424,7 @@ class Village
                 $oases = [3, 6, 9, 10, 11];
                 break;
         }
-        if (sizeof($oases)) {
+        if (count($oases)) {
             $oasesString = implode(",", $oases);
             $types = $this->db->fetchPluck("SELECT type FROM odata WHERE did=? AND type IN($oasesString) LIMIT 3",
                 [$this->getKid()]);
@@ -566,7 +566,7 @@ class Village
                     $lvl[] = $this->getField($i)['level'];
                 }
             }
-            if (!sizeof($lvl)) {
+            if (!count($lvl)) {
                 $lvl[] = 0;
             }
 
@@ -584,7 +584,7 @@ class Village
                 }
             }
         }
-        if (!sizeof($lvl)) {
+        if (!count($lvl)) {
             $lvl[] = 0;
         }
 
@@ -849,7 +849,7 @@ HTML;
                 $this->modifyResources($costs);
             }
             ++$this->workers[$field <= 18 ? 'fieldsNum' : 'buildsNum'];
-            if (sizeof($this->onLoadBuildings['master'])) {
+            if (count($this->onLoadBuildings['master'])) {
                 $Builder = new MasterBuilder();
                 $Builder->updateCommence($this->getKid(), false);
                 $this->fetchMasterBuildsAll();
@@ -858,7 +858,7 @@ HTML;
             }
         } else {
             $commence = time() + $this->calcWhenResourcesAreAvailable($costs);
-            if (sizeof($this->onLoadBuildings['master'])) {
+            if (count($this->onLoadBuildings['master'])) {
                 $end = end($this->onLoadBuildings['master']);
                 $commence += $end['commence'] - time();
             }
@@ -879,7 +879,7 @@ HTML;
                 "commence" => (int)$commence,
                 'isMaster' => $isMaster,
             ];
-            if (sizeof($this->onLoadBuildings['master'])) {
+            if (count($this->onLoadBuildings['master'])) {
                 $Builder = new MasterBuilder();
                 $Builder->updateCommence($this->getKid(), false);
                 $this->fetchMasterBuildsAll();
@@ -1262,7 +1262,7 @@ HTML;
 
     public function removeBuilding($id)
     {
-        $updateMaster = sizeof($this->onLoadBuildings['master']);
+        $updateMaster = count($this->onLoadBuildings['master']);
         if (!isset($this->onLoadBuildings['normal'][$id]) && !isset($this->onLoadBuildings['master'][$id])) {
             return false;
         }
@@ -1324,7 +1324,7 @@ HTML;
 
     public function recalculateBuildingTimes(){
         usort($this->onLoadBuildings['normal'], function($a, $b){
-            return $a['id'] == $b['id'] ? 0 : $a['id'] > $b['id'] ? 1 : -1;
+            return $a['id'] == $b['id'] ? 0 : ($a['id'] > $b['id'] ? 1 : -1);
         });
         $tmp = [];
         $lastCommence = [
@@ -1339,7 +1339,7 @@ HTML;
             ++$tmp[$v['building_field']];
             $previousCommence = &$lastCommence[$v['building_field'] <= 18 ? 'field' : 'building'];
             $maxTime = $v['start_time'];
-            if(!($this->session->getRace() == 1 && sizeof($previousCommence) <= 2)){
+            if(!($this->session->getRace() == 1 && count($previousCommence) <= 2)){
                 $max = max($previousCommence);
                 if($max > 0){
                     $maxTime += max($previousCommence) - $v['start_time'];
@@ -1460,7 +1460,7 @@ HTML;
             if ($stmt->rowCount()) {
                 $this->modifyResources($costs);
             }
-            if (sizeof($this->onLoadBuildings['master'])) {
+            if (count($this->onLoadBuildings['master'])) {
                 (new MasterBuilder())->updateCommence($this->getKid(), false);
             }
             if ($this->getField($field)['item_id'] == 40) {
@@ -1469,7 +1469,7 @@ HTML;
             ++$this->workers[$field <= 18 ? 'fieldsNum' : 'buildsNum'];
         } else {
             $commence = time() + $this->calcWhenResourcesAreAvailable($costs);
-            if (sizeof($this->onLoadBuildings['master'])) {
+            if (count($this->onLoadBuildings['master'])) {
                 $end = end($this->onLoadBuildings['master']);
                 $commence += $end['commence'] - time();
             }
@@ -1492,7 +1492,7 @@ HTML;
                 "commence" => $commence,
                 'isMaster' => $isMaster,
             ];
-            if (sizeof($this->onLoadBuildings['master'])) {
+            if (count($this->onLoadBuildings['master'])) {
                 $Builder = new MasterBuilder();
                 $Builder->updateCommence($this->getKid(), false);
             }

@@ -3,7 +3,6 @@ namespace Controller\Ajax;
 
 use Core\PackageCode;
 use Core\Session;
-use const FILTER_SANITIZE_STRING;
 use function getDisplay;
 use function isServerFinished;
 
@@ -35,7 +34,7 @@ class redeemCode extends AjaxBase
             return;
         }
         if(isset($_POST['redeemCode'])){
-            $redeemCode = filter_var(trim($_POST['redeemCode']), FILTER_SANITIZE_STRING);
+            $redeemCode = sanitize_string(trim($_POST['redeemCode']));
             if(!PackageCode::doesCodeExists($redeemCode)){
                 $this->response['data']['errorMsg'] = 'invalidCode';
             } else if(PackageCode::isCodeUsed($redeemCode)){

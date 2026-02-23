@@ -47,7 +47,7 @@ class prepareMarketplace extends AjaxBase
                 (int)$_POST['r2'],
                 (int)$_POST['r3'],
                 (int)$_POST['r4'],
-                filter_var($_POST['dname'], FILTER_SANITIZE_STRING),
+                sanitize_string($_POST['dname']),
                 $_POST['x'],
                 $_POST['y'],
                 (int)$_POST['id'],

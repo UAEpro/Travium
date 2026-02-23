@@ -77,7 +77,7 @@ class SupportFormCtrl extends GameCtrl
             $this->data['message']['value'] = '';
             $this->data['message']['error'] = '';
             if(WebService::isPost()){
-                $this->data['message']['value'] = filter_var(trim(strip_tags($_POST['support']['message'])), FILTER_SANITIZE_STRING);
+                $this->data['message']['value'] = sanitize_string(trim(strip_tags($_POST['support']['message'])));
                 if(empty($this->data['message']['value'])){
                     $this->data['message']['error'] = T("Support", "errors.This field is necessary");
                     $countErrors++;

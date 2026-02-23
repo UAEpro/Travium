@@ -4,11 +4,7 @@ class Autoloder
 {
     public static function register($prepend = FALSE)
     {
-        if(version_compare(phpversion(), '5.3.0', '>=')) {
-            spl_autoload_register([__CLASS__, 'autoload'], TRUE, $prepend);
-        } else {
-            spl_autoload_register([__CLASS__, 'autoload']);
-        }
+        spl_autoload_register([__CLASS__, 'autoload'], TRUE, $prepend);
     }
 
     public static function autoload($className)

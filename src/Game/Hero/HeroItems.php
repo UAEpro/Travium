@@ -128,7 +128,7 @@ class HeroItems
                 ]);
         }
         $btype = mt_rand(1, 15);
-        $type = $btypes[$btype][mt_rand(0, sizeof($btypes[$btype]) - 1)];
+        $type = $btypes[$btype][mt_rand(0, count($btypes[$btype]) - 1)];
         $consume = FALSE;
         if ($btype >= 7 && $btype != 12 && $btype != 13) {
             $consume = TRUE;

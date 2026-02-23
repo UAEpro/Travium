@@ -70,7 +70,7 @@ class SmithyCtrl extends AnyCtrl
         $this->getSmithyWrapper($index);
         $helper = new GoldHelper();
         $this->view->vars['finishNowButton'] = $helper->finishNowButton();
-        if (array_sum($this->smithy) == (sizeof($this->smithy)) * 20) {
+        if (array_sum($this->smithy) == (count($this->smithy)) * 20) {
             $this->view->vars['upgradeAllButton'] = null;
         } else {
             $this->view->vars['upgradeAllButton'] = ExtraModules::showButton("smithyUpgradeAllToMax");
@@ -111,7 +111,7 @@ class SmithyCtrl extends AnyCtrl
         $this->view->vars['availableResearches'] = '';
         $_template = new PHPBatchView("build/SmithyResearch");
         $helper = new GoldHelper();
-        $size = sizeof($this->smithy);
+        $size = count($this->smithy);
         foreach ($this->smithy as $nr => $cur_lvl) {
             --$size;
             $unitId = nrToUnitId($nr, Session::getInstance()->getRace());
@@ -162,12 +162,12 @@ class SmithyCtrl extends AnyCtrl
 
     private function isResearch()
     {
-        return sizeof($this->researches);
+        return count($this->researches);
     }
 
     private function isResearchFull()
     {
-        return sizeof($this->researches) >= $this->smithyCapacity;
+        return count($this->researches) >= $this->smithyCapacity;
     }
 
     private function getSmithy()

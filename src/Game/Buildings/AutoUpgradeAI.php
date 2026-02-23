@@ -349,7 +349,7 @@ class AutoUpgradeAI
             $levels[$build['level']][] = $index;
         }
         ksort($levels, SORT_ASC);
-        if(sizeof($levels)){
+        if(count($levels)){
             foreach($levels as $level => $childs){
                 foreach($childs as $field){
                     if($this->upgradeIndex($field, true)){

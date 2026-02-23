@@ -686,7 +686,7 @@ class GoldHelper
                 ],
                 T("Buildings", "construct_with_master_builder"));
         }
-        if (($village->isWW() && sizeof($village->onLoadBuildings['master']) >= $config->masterBuilder->maxTasksInWonder) || sizeof($village->onLoadBuildings['master']) >= $config->masterBuilder->maxTasksInNoneWonder) {
+        if (($village->isWW() && count($village->onLoadBuildings['master']) >= $config->masterBuilder->maxTasksInWonder) || count($village->onLoadBuildings['master']) >= $config->masterBuilder->maxTasksInNoneWonder) {
             return getButton([
                 "type"    => "button",
                 "class"   => "$class builder disabled",

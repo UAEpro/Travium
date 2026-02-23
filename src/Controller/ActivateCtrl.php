@@ -35,7 +35,7 @@ class ActivateCtrl extends OutOfGameCtrl
         if ($config->dynamic->maintenance == TRUE) {
             $this->redirect("login.php");
         }
-        $this->token = $token = filter_var(isset($_GET['token']) ? $_GET['token'] : (isset($_SESSION[WebService::fixSessionPrefix('token')]) ? $_SESSION[WebService::fixSessionPrefix('token')] : -1),FILTER_SANITIZE_STRING);
+        $this->token = $token = sanitize_string(isset($_GET['token']) ? $_GET['token'] : (isset($_SESSION[WebService::fixSessionPrefix('token')]) ? $_SESSION[WebService::fixSessionPrefix('token')] : -1));
         if ($token == -1) {
             $this->redirect("login.php");
         }

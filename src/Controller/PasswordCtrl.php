@@ -14,8 +14,8 @@ class PasswordCtrl extends OutOfGameCtrl
         $this->view->vars['titleInHeader'] = T("Login", "Login");
         $this->view->vars['bodyCssClass'] = 'perspectiveBuildings';
         $this->view->vars['contentCssClass'] = 'login';
-        $npw = isset($_GET['npw']) ? filter_var($_GET['npw'], FILTER_SANITIZE_STRING) : NULL;
-        $cpw = isset($_GET['cpw']) ? filter_var($_GET['cpw'], FILTER_SANITIZE_STRING) : NULL;
+        $npw = isset($_GET['npw']) ? sanitize_string($_GET['npw']) : NULL;
+        $cpw = isset($_GET['cpw']) ? sanitize_string($_GET['cpw']) : NULL;
         $this->view->vars['content'] .= '<div id="passwordForgotten"><h4>' . T("Login", "PasswordForgotten?") . '</h4>';
         if ($npw === NULL || $cpw === NULL) {
             goto finalize;

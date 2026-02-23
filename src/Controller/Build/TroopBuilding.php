@@ -88,7 +88,7 @@ class TroopBuilding extends AnyCtrl
             }
         }
         if (!isset($this->view->vars['canTrain'])) {
-            $this->view->vars['canTrain'] = sizeof($troopsCanTrain);
+            $this->view->vars['canTrain'] = count($troopsCanTrain);
         }
         $this->view->vars['item_id'] = $this->building_id;
         $this->view->vars['index'] = $index;

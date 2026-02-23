@@ -33,7 +33,7 @@ class AdvertisementCtrl
         $params['method'] = $_REQUEST['method'];
         $params['time'] = TimezoneHelper::date("Y-m-d H:i", $data['expire']);
         if(WebService::isPost() && Session::validateChecker()){
-            $params['time'] = filter_var($_POST['time'], FILTER_SANITIZE_STRING);
+            $params['time'] = sanitize_string($_POST['time']);
             $params['content'] = $_POST['content'];
             if(TimezoneHelper::strtotime($params['time']) && !empty($params['content'])){
                 $time = TimezoneHelper::strtotime($params['time']);
@@ -60,7 +60,7 @@ class AdvertisementCtrl
         $params['method'] = $_REQUEST['method'];
         $params['time'] = TimezoneHelper::date("Y-m-d H:i");
         if(WebService::isPost() && Session::validateChecker()){
-            $params['time'] = filter_var($_POST['time'], FILTER_SANITIZE_STRING);
+            $params['time'] = sanitize_string($_POST['time']);
             $params['content'] = $_POST['content'];
             if(TimezoneHelper::strtotime($params['time']) && !empty($params['content'])){
                 $time = TimezoneHelper::strtotime($params['time']);

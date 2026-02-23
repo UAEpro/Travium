@@ -86,7 +86,7 @@ class BerichteModel
         $db = DB::getInstance();
         $cond = '';
         if ($tab == 1 || $tab == 2 || $tab == 3 || $tab == 4) {
-            if (sizeof($customReports) == 0) {
+            if (count($customReports) == 0) {
                 $customReports = [0];
             }
             $cond = ' AND type IN(' . implode(",", $customReports[$tab]) . ')';

@@ -50,7 +50,7 @@
             <strong><?= $vars['success']; ?></strong>
         </div>
     <?php endif; ?>
-    <?php if (sizeof($vars['errors'])): ?>
+    <?php if (count($vars['errors'])): ?>
         <div class="alert alert-danger">
             <?= T("TransferGold", "the_following_errors"); ?>
 
@@ -118,7 +118,7 @@
         </table>
     </form>
     <br>
-    <?php if (sizeof($vars['recent_transfers'])): ?>
+    <?php if (count($vars['recent_transfers'])): ?>
         <h2><?= T("TransferGold", "recent_transfers"); ?>:</h2>
         <br>
         <table cellpadding="1" cellspacing="1" id="player" class="row_table_data recentTransfers">

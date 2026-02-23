@@ -95,7 +95,7 @@ class MinimapCtrl extends AnyCtrl
             $background = 'FFFFFF'; // default background.
 
         $pattern = '~^[a-f0-9]{6,6}$~i'; // accept only valid hexadecimal colour values.
-        if (!@preg_match($pattern, $foreground) or !@preg_match($pattern, $background)) {
+        if (!preg_match($pattern, $foreground) || !preg_match($pattern, $background)) {
             trigger_error("Invalid hexadecimal colour value(s) found", E_USER_WARNING);
             return false;
         }

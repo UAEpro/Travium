@@ -17,15 +17,7 @@ use Model\MovementsModel;
 use Model\OasesModel;
 use Model\RallyPoint\RallyPointModel;
 use resources\View\PHPBatchView;
-use Securimage;
-use const INCLUDE_PATH;
 use function getCustom;
-
-if (isset($_REQUEST['loadCaptcha'])) {
-    require_once INCLUDE_PATH . "Plugins/securimage/securimage_show.php";
-    exit();
-}
-require_once INCLUDE_PATH . "Plugins/securimage/securimage.php";
 
 class FarmList
 {
@@ -259,72 +251,19 @@ JS;
 
     private function handleLock()
     {
-        $error = false;
-        $secureImage = new Securimage();
-        if (WebService::isPost() && isset($_POST['code']) && !empty($_POST['code'])) {
-            $code = trim($_POST['code']);
-            if ($secureImage->check($code) !== false) {
-                FarmlistTracker::unlock();
-                redirect("build.php?id=39&tt=99");
-            }
-            $error = true;
+        if (WebService::isPost() && isset($_POST['unlock'])) {
+            FarmlistTracker::unlock();
+            redirect("build.php?id=39&tt=99");
         }
         $HTML = '<h4 class="round">' . T("farmListLockHandle", "title") . '</h4>';
         $HTML .= '<form action="build.php?tt=99&id=39" method="POST">';
         $HTML .= T("farmListLockHandle", "desc") . '<br /><br />';
-        $HTML .= '
-<script type="text/javascript">
-function reloadCode(){
-    document.getElementById("recaptchaImage").setAttribute("src", "build.php?id=39&tt=99&loadCaptcha&" + Math.random());
-}
-</script>
-<table class="transparent loginTable">
-				<tbody>
-					<tr>
-						<th class="captcha">
-						' . T("farmListLockHandle", "captcha") . '</th>
-						<td>
-                            <img id="recaptchaImage" src="build.php?id=39&tt=99&loadCaptcha">
-						</td>
-						<td>
-						</td>
-					</tr>
-					<tr>
-					<td></td>
-					<td>
-					<input class="text" type="text" name="code" style="margin-bottom: 3px;">
-					<div class="error ' . getDirection() . '" style="font-weight: bold">' . ($error ? T('farmListLockHandle',
-                "Sorry you submitted wrong answer") : '') . '</div>
-
-					</td>
-</tr>
-<tr>
-					<td></td>
-					<td><a href="#" onclick="reloadCode();">' . T("farmListLockHandle", "newCode") . '</a></td>
-                    </tr>
-					<tr>
-					<tr>
-					<td>
-					</td>
-					<td>
-						<button type="submit" value="' . T("farmListLockHandle", "submit") . '"  class="green ">
-							<div class="button-container addHoverClick ">
-								<div class="button-background">
-									<div class="buttonStart">
-										<div class="buttonEnd">
-											<div class="buttonMiddle"></div>
-										</div>
-									</div>
-								</div>
-								<div class="button-content">' . T("farmListLockHandle", "submit") . '</div>
-							</div>
-						</button>
-					</td>
-					<td>
-					</td>
-				</tr>
-				</tbody>
-			</table>';
+        $HTML .= '<input type="hidden" name="unlock" value="1">';
+        $HTML .= '<button type="submit" class="green ">';
+        $HTML .= '<div class="button-container addHoverClick ">';
+        $HTML .= '<div class="button-background"><div class="buttonStart"><div class="buttonEnd"><div class="buttonMiddle"></div></div></div></div>';
+        $HTML .= '<div class="button-content">' . T("farmListLockHandle", "submit") . '</div>';
+        $HTML .= '</div></button>';
         $HTML .= '</form>';
         return $HTML;
     }

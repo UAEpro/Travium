@@ -8,7 +8,7 @@ class MapModel
 {
     public function addTileBlocks(array $kidBatchAdd)
     {
-        if (!sizeof($kidBatchAdd)) {
+        if (!count($kidBatchAdd)) {
             return;
         }
         $db = DB::getInstance();
@@ -17,7 +17,7 @@ class MapModel
 
     public function addTileMarks(array $kidBatchAdd)
     {
-        if (!sizeof($kidBatchAdd)) {
+        if (!count($kidBatchAdd)) {
             return;
         }
         $db = DB::getInstance();

@@ -145,7 +145,7 @@ class paymentWizard extends AjaxBase
             $message = str_replace('[GAMEWORLD]', $worldId, $message);
             $message = str_replace('[TRIBE]', T("Global", "races." . Session::getInstance()->getRace()), $message);
             $message = str_replace('[CUSTOM_MESSAGE]',
-                filter_var($_POST['formData']['message'], FILTER_SANITIZE_STRING),
+                sanitize_string($_POST['formData']['message']),
                 $message);
             $message = str_replace('[INVITE_LINK]', $view->vars['inviteLink'], $message);
             $x = 0;

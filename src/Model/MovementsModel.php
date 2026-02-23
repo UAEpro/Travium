@@ -70,7 +70,7 @@ class MovementsModel
 
     public function modifyMovement($id, array $modify)
     {
-        if (!$id || !sizeof($modify)) {
+        if (!$id || !count($modify)) {
             return FALSE;
         }
         $db = DB::getInstance();

@@ -115,7 +115,7 @@ class sendTroops extends RallyPointHTML
             $this->getAvailableAttackTypes();
         }
         if (isset($_REQUEST['dname'])) {
-            $this->result['settings']['to']['dname'] = filter_var($_REQUEST['dname'], FILTER_SANITIZE_STRING);
+            $this->result['settings']['to']['dname'] = sanitize_string($_REQUEST['dname']);
         }
         if (isset($_REQUEST['redeployHero']) && $this->result['ui']['showHeroChangeHomeCheckBox']) {
             $this->result['settings']['redeployHero'] = TRUE;
@@ -127,8 +127,7 @@ class sendTroops extends RallyPointHTML
 
         if (isset($_POST['timestamp']) && isset($_POST['timestamp_checksum'])) {
             $this->result['settings']['timestamp'] = (int)$_POST['timestamp'];
-            $this->result['settings']['timestamp_checksum'] = filter_var($_POST['timestamp_checksum'],
-                FILTER_SANITIZE_STRING);
+            $this->result['settings']['timestamp_checksum'] = sanitize_string($_POST['timestamp_checksum']);
 
             if (!(isset($_REQUEST['edit']) && $_REQUEST['edit'] == 'edit')) {
                 $a2b = $this->getA2b($this->result['settings']['timestamp'],
@@ -1123,7 +1122,7 @@ class sendTroops extends RallyPointHTML
     private function getVillageByNameLIKE($name)
     {
         $db = DB::getInstance();
-        $name = filter_var($name, FILTER_SANITIZE_STRING);
+        $name = sanitize_string($name);
         $name = $db->real_escape_string($name);
         $search = "'%$name%'";
         return $db->fetchScalar("SELECT kid FROM vdata WHERE name LIKE " . $search . " LIMIT 1");

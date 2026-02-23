@@ -8,7 +8,7 @@ class Arianpal
     public static function request(array $providerData, array $productData, array $paymentLog)
     {
         $client = new SoapClient('http://merchant.arianpal.com/WebService.asmx?wsdl');
-        if (sizeof(explode(":", $providerData['connectInfo'])) <> 2) {
+        if (count(explode(":", $providerData['connectInfo'])) <> 2) {
             return;
         }
         list($merchantID, $password) = explode(":", $providerData['connectInfo']);
@@ -17,7 +17,7 @@ class Arianpal
                 "MerchantID" => $merchantID,
                 "Password" => $password,
                 "Price" => ceil(($paymentLog['payPrice'] / 10)),
-                "ReturnPath" => WebService::getProtocol() . WebService::getJustDomain() . '/payment/process/index.php?METHOD=onProviderReturn&ORDER=' . filter_var($_REQUEST['ORDER'], FILTER_SANITIZE_STRING),
+                "ReturnPath" => WebService::getProtocol() . WebService::getJustDomain() . '/payment/process/index.php?METHOD=onProviderReturn&ORDER=' . sanitize_string($_REQUEST['ORDER']),
                 "ResNumber" => sprintf("%s-%s", $paymentLog['id'], $paymentLog['secureId']),
                 "Description" => PaymentHelper::getPackageInfo($paymentLog['id'], $paymentLog['worldUniqueId'], $productData['goldProductName'], $paymentLog['uid']),
                 "Paymenter" => "WID: {$paymentLog['worldUniqueId']} | UID: {$paymentLog['uid']}",
@@ -36,7 +36,7 @@ class Arianpal
 
     public static function verify(array $providerData, array $paymentLog)
     {
-        if (sizeof(explode(":", $providerData['connectInfo'])) <> 2) {
+        if (count(explode(":", $providerData['connectInfo'])) <> 2) {
             return false;
         }
         list($merchantID, $password) = explode(":", $providerData['connectInfo']);

@@ -14,7 +14,7 @@ class mapFlagUpdate extends AjaxBase
 		$dataId = $data['dataId'];
 		$index = $data['index'];
 		$owner = $data['owner'];
-		$text = filter_var($data['text'], FILTER_SANITIZE_STRING);
+		$text = sanitize_string($data['text']);
 		if($index < ($data['owner'] == 'player' ? 0 : 10) || $index > ($data['owner'] == 'player' ? 10 : 20)) {
 			$this->response['error'] = TRUE;
 			$this->response['errorMsg'] = T("map", "colour_does_not_exists");

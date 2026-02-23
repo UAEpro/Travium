@@ -1,5 +1,5 @@
 <form method="post" action="reports.php?t=<?=$vars['selectedTabIndex'];?>" name="msg" id="reportsForm">
-    <?php if(isset($vars['allCategories'][$vars['selectedTabId']]) && sizeof($vars['allCategories'][$vars['selectedTabId']])):?>
+    <?php if(isset($vars['allCategories'][$vars['selectedTabId']]) && count($vars['allCategories'][$vars['selectedTabId']])):?>
     <div class="boxes boxesColor gray reportFilter">
         <div class="boxes-tl"></div>
         <div class="boxes-tr"></div>

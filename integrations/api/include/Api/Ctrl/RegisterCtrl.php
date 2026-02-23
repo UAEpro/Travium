@@ -160,7 +160,7 @@ class RegisterCtrl extends ApiAbstractCtrl
         }
         {
             if (empty($username)
-                || !filter_var($username, FILTER_SANITIZE_STRING)
+                || !sanitize_string($username)
                 || strpos($username, '@') !== FALSE
             ) {
                 if (!isset($this->response['fields']['username'])) {

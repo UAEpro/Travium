@@ -34,7 +34,7 @@ class FilteredUrlsCtrl
                 ;
                 $current = $this->getFromCache();
                 $_GET['del'] = (int)$_GET['del'];
-                if(sizeof($current) > 1){
+                if(count($current) > 1){
                     if(isset($current[$_GET['del']])){
                         unset($current[$_GET['del']]);
                     }
@@ -43,7 +43,7 @@ class FilteredUrlsCtrl
             }
         }
         $params['content'] = $this->getFromCache();
-        $params['total'] = sizeof($params['content']);
+        $params['total'] = count($params['content']);
         Dispatcher::getInstance()->appendContent(Template::getInstance()->load($params, 'tpl/filteredUrls.tpl')->getAsString());
     }
     public function getFromCache(){

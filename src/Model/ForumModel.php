@@ -478,7 +478,7 @@ class ForumModel
                 $assoc[] = $row;
             }
             $find->free();
-            $total += sizeof($assoc);
+            $total += count($assoc);
         }
 
         return $total > 0;
@@ -610,9 +610,9 @@ class ForumModel
         $desc = $db->real_escape_string($desc);
         $allys_by_name = $db->real_escape_string($allys_by_name);
         $users_by_name = $db->real_escape_string($users_by_name);
-        $db->query("DELETE FROM forum_open_players WHERE forumId=$forumId " . (sizeof($users) ? " AND uid NOT IN(" . implode(",",
+        $db->query("DELETE FROM forum_open_players WHERE forumId=$forumId " . (count($users) ? " AND uid NOT IN(" . implode(",",
                     $users) . ")" : ''));
-        $db->query("DELETE FROM forum_open_alliances WHERE forumId=$forumId " . (sizeof($bnds) ? " AND uid NOT IN(" . implode(",",
+        $db->query("DELETE FROM forum_open_alliances WHERE forumId=$forumId " . (count($bnds) ? " AND uid NOT IN(" . implode(",",
                     $bnds) . ")" : ''));
         if (is_array($allys_by_id)) {
             foreach ($allys_by_id as $allianceId) {

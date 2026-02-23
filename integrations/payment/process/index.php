@@ -27,9 +27,9 @@ if (!isset($_REQUEST['METHOD'], $_REQUEST['ORDER'])) {
     echo 'Insufficient parameters.';
     return;
 }
-$order = filter_var($_REQUEST['ORDER'], FILTER_SANITIZE_STRING);
-$method = filter_var($_REQUEST['METHOD'], FILTER_SANITIZE_STRING);
-list($orderId, $orderSecureId) = explode('-', filter_var($_REQUEST['ORDER'], FILTER_SANITIZE_STRING));
+$order = sanitize_string($_REQUEST['ORDER']);
+$method = sanitize_string($_REQUEST['METHOD']);
+list($orderId, $orderSecureId) = explode('-', sanitize_string($_REQUEST['ORDER']));
 $paymentLog = PaymentHelper::getOrder($orderId, $orderSecureId);
 if ($paymentLog === FALSE) {
     echo 'Unknown order.';
@@ -68,7 +68,7 @@ if ($method == 'loadProvider') {
         return;
     }
 } else if ($method == 'onProviderReturn') {
-    $action = filter_var($_REQUEST['result'] ?? null, FILTER_SANITIZE_STRING);
+    $action = sanitize_string($_REQUEST['result'] ?? null);
     if ($paymentLog['status'] <> 4 && $paymentLog['status'] <> 3) {
         echo 'Payment is not ready for this stage.';
         return;

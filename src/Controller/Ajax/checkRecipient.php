@@ -12,14 +12,14 @@ class checkRecipient extends AjaxBase
     public function dispatch()
     {
         if(is_array($_REQUEST['recipients'])){
-            if(sizeof($_REQUEST['recipients']) > getDisplay("maximumMultiMessageSendNum")){
+            if(count($_REQUEST['recipients']) > getDisplay("maximumMultiMessageSendNum")){
                 $this->response['error'] = true;
                 $this->response['errorMsg'] = sprintf(T("Messages", "You cannot send a message to more than %s users"), getDisplay("maximumMultiMessageSendNum"));
                 return;
             }
             $this->response['success'] = 'success';
             foreach($_REQUEST['recipients'] as $recipient){
-                $recipient = filter_var($recipient, FILTER_SANITIZE_STRING);
+                $recipient = sanitize_string($recipient);
                 $this->checkRecipient($recipient);
                 if($this->response['error']){
                     unset($this->response['success']);

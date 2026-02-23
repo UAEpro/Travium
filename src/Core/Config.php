@@ -13,14 +13,12 @@ class Config
     public static function getAdvancedProperty($property){
         return self::getProperty("settings", "advanced", $property);
     }
-    public static function getProperty(){
-        $args = func_get_args();
-        $argsCount = func_num_args();
+    public static function getProperty(string ...$args){
         $config = self::getInstance();
-        if($argsCount == 2){
+        if(count($args) == 2){
             return $config->{$args[0]}->{$args[1]};
         }
-        for($i = 0; $i <= $argsCount - 1; ++$i){
+        for($i = 0; $i <= count($args) - 1; ++$i){
             $config = $config->{$args[$i]};
         }
         return $config;

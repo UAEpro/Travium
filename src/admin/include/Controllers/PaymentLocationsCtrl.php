@@ -62,8 +62,8 @@ class PaymentLocationsCtrl
         $params['location_name'] = $result['location'];
         $params['content_language'] = $result['content_language'];
         if (WebService::isPost() && Session::validateChecker()) {
-            $params['location_name'] = filter_var($_POST['location_name'], FILTER_SANITIZE_STRING);
-            $params['content_language'] = filter_var($_POST['content_language'], FILTER_SANITIZE_STRING);
+            $params['location_name'] = sanitize_string($_POST['location_name']);
+            $params['content_language'] = sanitize_string($_POST['content_language']);
             if (empty($params['location_name']) || empty($params['content_language'])) {
                 $params['error'] = 'fill all inputs';
             } else {
@@ -90,8 +90,8 @@ class PaymentLocationsCtrl
             'method' => $_REQUEST['method'],
         ];
         if (WebService::isPost() && Session::validateChecker()) {
-            $params['location_name'] = filter_var($_POST['location_name'], FILTER_SANITIZE_STRING);
-            $params['content_language'] = filter_var($_POST['content_language'], FILTER_SANITIZE_STRING);
+            $params['location_name'] = sanitize_string($_POST['location_name']);
+            $params['content_language'] = sanitize_string($_POST['content_language']);
             if (empty($params['location_name']) || empty($params['content_language'])) {
                 $params['error'] = 'fill all inputs';
             } else {

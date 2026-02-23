@@ -1,5 +1,5 @@
 <?php
-if(sizeof($argv) < 2){
+if(count($argv) < 2){
 	die("Please provide a version");
 }
 $version = trim($argv[1]);

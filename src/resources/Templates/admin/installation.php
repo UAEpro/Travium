@@ -381,7 +381,7 @@ if (isset($vars['installQueued']) && $vars['installQueued']): ?>
     </tr>
     </thead>
     <tbody>
-    <?php if (sizeof($vars['gameWorlds']) <= 0): ?>
+    <?php if (count($vars['gameWorlds']) <= 0): ?>
         <tr>
             <td colspan="8" style="text-align: center">No game worlds found.</td>
         </tr>
@@ -467,7 +467,7 @@ if (isset($vars['installQueued']) && $vars['installQueued']): ?>
     </tr>
     </thead>
     <tbody>
-    <?php if (sizeof($vars['tasks']) <= 0): ?>
+    <?php if (count($vars['tasks']) <= 0): ?>
         <tr>
             <td colspan="5" style="text-align: center">No tasks found.</td>
         </tr>

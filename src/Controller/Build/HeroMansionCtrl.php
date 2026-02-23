@@ -152,7 +152,7 @@ class HeroMansionCtrl extends AnyCtrl
     private function getNearDistanceOasis()
     {
         $nearDistanceOasis = $this->getNearDistanceOasisIds(Village::getInstance()->getKid());
-        if (!sizeof($nearDistanceOasis)) {
+        if (!count($nearDistanceOasis)) {
             $this->view->vars['inReachOasis'] .= '<tr><td colspan="5"></td></tr>';
             return;
         }
@@ -253,7 +253,7 @@ class HeroMansionCtrl extends AnyCtrl
     private function getAbandonOasisTable()
     {
         $direction = strtolower(getDirection());
-        $this->view->vars['abandon']['size'] = sizeof($this->abandoning);
+        $this->view->vars['abandon']['size'] = count($this->abandoning);
         $db = DB::getInstance();
         foreach ($this->abandoning as $row) {
             $url = 'build.php?gid=37&amp;c=' . (Session::getInstance()->getChecker()) . '&amp;cancel=' . $row['id'];

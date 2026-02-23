@@ -3751,9 +3751,9 @@ Crannies have 20% less capacity against teuton raids with hero + 10-20% from any
         $rate = getGameSpeed();
         $t = array_values(self::$data['buildings'][$gid - 1]['time']);
 
-        if (sizeof($t) < 3) {
+        if (count($t) < 3) {
             $t[1] = 1.16;
-            if (sizeof($t) === 1) {
+            if (count($t) === 1) {
                 $t[1] = 1;
             }
             $t[2] = 1875 * $t[1];

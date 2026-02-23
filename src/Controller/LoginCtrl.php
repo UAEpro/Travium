@@ -112,9 +112,8 @@ class LoginCtrl extends OutOfGameCtrl
             "selectedLang")}->title;
         $this->LoginView = new PHPBatchView("system/login");
         $this->LoginView->vars['WelcomeText'] = sprintf(T("Login", "Welcome"), $title);
-        $this->LoginView->vars['name'] = filter_var(isset($_POST['name']) ? $_POST['name'] : (isset($_SESSION[WebService::fixSessionPrefix('user')]) ? $_SESSION[WebService::fixSessionPrefix('user')] : ''),
-            FILTER_SANITIZE_STRING);
-        $this->LoginView->vars['password'] = filter_var(isset($_POST['password']) ? $_POST['password'] : '', FILTER_SANITIZE_STRING);
+        $this->LoginView->vars['name'] = sanitize_string(isset($_POST['name']) ? $_POST['name'] : (isset($_SESSION[WebService::fixSessionPrefix('user')]) ? $_SESSION[WebService::fixSessionPrefix('user')] : ''));
+        $this->LoginView->vars['password'] = sanitize_string(isset($_POST['password']) ? $_POST['password'] : '');
         $this->LoginView->vars['lowRes'] = (bool)isset($_POST['lowRes']);
         $this->LoginView->vars['userError'] = $this->LoginView->vars['pwError'] = '';
         $this->LoginView->vars['captchaError'] = '';

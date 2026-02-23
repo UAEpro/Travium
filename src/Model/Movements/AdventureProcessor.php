@@ -127,10 +127,10 @@ class AdventureProcessor
             }
             shuffle($randGive);
             sort($randGive);
-            if (sizeof($randGive) == 1) {
+            if (count($randGive) == 1) {
                 $randP = $randGive[0];
             } else {
-                $randP = $randGive[mt_rand(0, sizeof($randGive) - 1)];
+                $randP = $randGive[mt_rand(0, count($randGive) - 1)];
             }
             if($success_adventures == 2 && in_array(4, $randGive)){
                 $randP = 4;
@@ -439,7 +439,7 @@ class AdventureProcessor
                 if ($bonus == 7 || $bonus == 8 || $bonus == 9) {
                     $base *= $config->game->cage_multiplier;
                 }
-                $rand = $rand[mt_rand(1, sizeof($rand))];
+                $rand = $rand[mt_rand(1, count($rand))];
                 $tolerance = 3 * game_progress();
                 if ($bonus <= 6 || ($bonus >= 12 && $bonus <= 15)) {
                     $tolerance = 0;

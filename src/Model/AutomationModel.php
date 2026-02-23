@@ -87,10 +87,10 @@ class AutomationModel
     public static function getRandomCountryFlag()
     {
         $codes = Config::getInstance()->fakeUsersCountryCodes;
-        if (!sizeof($codes)) {
+        if (!count($codes)) {
             $codes = array_keys(Config::getInstance()->countryCodes);
         }
-        $size = sizeof($codes);
+        $size = count($codes);
         if ($size == 1) {
             return strtolower($codes[0]);
         }

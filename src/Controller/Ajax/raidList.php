@@ -162,7 +162,7 @@ class raidList extends AjaxBase
                 break;
             case 'actionAddList':
                 $m = new FarmListModel();
-                $listName = filter_var($_POST['listName'], FILTER_SANITIZE_STRING);
+                $listName = sanitize_string($_POST['listName']);
                 if ($m->isVillageMine(Session::getInstance()->getPlayerId(), (int)$_POST['did'])) {
                     if (empty($listName)) {
                         $this->response['error'] = TRUE;
@@ -184,7 +184,7 @@ class raidList extends AjaxBase
                 break;
             case 'actionUpdateList':
                 $m = new FarmListModel();
-                $listName = filter_var($_POST['listName'], FILTER_SANITIZE_STRING);
+                $listName = sanitize_string($_POST['listName']);
                 $list = $m->getMyFarmListById((int)$_POST['listId'], Session::getInstance()->getPlayerId());
                 if ($list === FALSE) {
                     return;

@@ -64,7 +64,7 @@ HTML;
         if (!$click) {
             $content .= '<p class="f16" align="center"><a href="dorf1.php?ok=1">» ' . T("inGame", "continue") . '</a></p>';
         } else {
-            $content .= '<p class="f16" align="center"><a href="' . addslashes(filter_var($_SERVER['REQUEST_URI'], FILTER_SANITIZE_STRING)) . '">» ' . T("inGame", "continue") . '</a></p>';
+            $content .= '<p class="f16" align="center"><a href="' . addslashes(sanitize_string($_SERVER['REQUEST_URI'])) . '">» ' . T("inGame", "continue") . '</a></p>';
         }
         $content .= '</div>';
     }

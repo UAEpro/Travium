@@ -32,7 +32,7 @@ class BadWordsCtrl
             if(!isServerFinished() && isset($_GET['del']) && Session::validateChecker()){
                 $current = $this->getFromCache();
                 $_GET['del'] = (int)$_GET['del'];
-                if(sizeof($current) > 1){
+                if(count($current) > 1){
                     if(isset($current[$_GET['del']])){
                         unset($current[$_GET['del']]);
                     }
@@ -41,7 +41,7 @@ class BadWordsCtrl
             }
         }
         $params['content'] = $this->getFromCache();
-        $params['total'] = sizeof($params['content']);
+        $params['total'] = count($params['content']);
         Dispatcher::getInstance()->appendContent(Template::getInstance()->load($params, 'tpl/badWords.tpl')->getAsString());
     }
     public function getFromCache(){

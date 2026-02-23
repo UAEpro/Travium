@@ -98,7 +98,7 @@ class Map
             $ali[] = $row['aid2'];
         }
         $ali = array_unique($ali);
-        if (!sizeof($ali)) {
+        if (!count($ali)) {
             return;
         }
         $ali = implode(",", $ali);

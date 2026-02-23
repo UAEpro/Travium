@@ -23,7 +23,7 @@ class ImageMapCache
         $eTag = self::getETag($filename, $cachedContent['time']);
         $headers = self::getRequestHeaders();
         if (isset($headers['If-None-Match'])) {
-            if (0 === strcmp(str_replace('"', null, $headers['If-None-Match']), $eTag)) {
+            if (0 === strcmp(str_replace('"', '', $headers['If-None-Match']), $eTag)) {
                 header(sprintf("Date: %s", date(DATE_RFC822, $cachedContent['time'])));
                 http_response_code(304);
                 exit;

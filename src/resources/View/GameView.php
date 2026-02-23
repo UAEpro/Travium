@@ -76,7 +76,7 @@ class GameView
             }
             $memcache->add('ignoreList' . $this->session->getPlayerId(), $ignoreList, 86400);
         }
-        $filter = sizeof($ignoreList) ? "AND uid NOT IN(" . implode(",", $ignoreList) . ")" : '';
+        $filter = count($ignoreList) ? "AND uid NOT IN(" . implode(",", $ignoreList) . ")" : '';
         if (!($newMessages = $memcache->get("newMessages" . $this->session->getPlayerId()))) {
             $newMessages = $db->fetchScalar("SELECT COUNT(id) FROM mdata WHERE to_uid={$this->session->get("id")} AND delete_receiver=0 AND (viewed=0) $filter");
             $memcache->add('newMessages' . $this->session->getPlayerId(), $newMessages, 30);
@@ -296,12 +296,12 @@ class GameView
         $m = new InfoBoxModel();
         $publicInfobox = $m->getPublicInfoBox();
         $infoBox = $m->getMyInfoBox($this->session->getPlayerId());
-        if (!sizeof($infoBox) && !sizeof($publicInfobox)) {
+        if (!count($infoBox) && !count($publicInfobox)) {
             return;
         }
         $infoBox_count = 0;
         $view = new PHPBatchView("layout/sidebarBoxInfoBox");
-        $view->vars['total'] = sizeof($infoBox) + sizeof($publicInfobox);
+        $view->vars['total'] = count($infoBox) + count($publicInfobox);
         $view->vars['title'] = T("inGame", "total_messages") . ': ' . $view->vars['total'];
         $unread = $m->getUnreadInfoBoxCount($this->session->getPlayerId());
         if ($unread) {
@@ -339,7 +339,7 @@ class GameView
             $infoBox_count++;
         }
         $conf = Config::getInstance();
-        $infoBoxSize = sizeof($infoBox);
+        $infoBoxSize = count($infoBox);
         $session = $this->session;
 
         foreach ($infoBox as $row) {

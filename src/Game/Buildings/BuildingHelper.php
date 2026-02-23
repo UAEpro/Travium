@@ -206,7 +206,7 @@ class BuildingHelper
         while ($row = $find->fetch_assoc()) {
             $members[] = $row['id'];
         }
-        if (!sizeof($members)) {
+        if (!count($members)) {
             return FALSE;
         }
         $members = implode(",", $members);

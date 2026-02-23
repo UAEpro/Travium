@@ -178,7 +178,7 @@ class OptionCtrl extends GameCtrl
             if (isset($_POST['e']) && $_POST['e'] == 2 && isset($_POST['formType']) && $_POST['formType'] == 'account') {
                 $total_pop = Session::getInstance()->get("total_pop");
                 if ($total_pop < $config->gold->changeName->freeTillPopulation && Session::getInstance()->getTotalNameChanges() < $config->gold->changeName->freeTimes) {
-                    $newName = filter_var($_POST['acount_rename_new_name'], FILTER_SANITIZE_STRING);
+                    $newName = sanitize_string($_POST['acount_rename_new_name']);
                     if (empty($newName) || empty($_POST['account_rename_password_confirmation'])) {
                         $view->vars['error'] = T("Options",
                             "Please enter a new account name and confirmation password");

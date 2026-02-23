@@ -38,7 +38,7 @@ class finishNowPopup extends AjaxBase
         $x['demolish'] = FALSE;
         $totalPossible = 0;
         $totalImPossible = 0;
-        if(sizeof($village->onLoadBuildings['normal'])) {
+        if(count($village->onLoadBuildings['normal'])) {
             //load language
             $x['buildingOrder'] = TRUE;
             $tmp = [];
@@ -57,7 +57,7 @@ class finishNowPopup extends AjaxBase
                 }
                 $x['buildingOrders'][] = ["itemId" => $village->getField($onload['building_field'])['item_id'], 'lvl' => $level, 'possible' => $possible,];
             }
-            $x['buildingOrder'] = sizeof($x['buildingOrders']);
+            $x['buildingOrder'] = count($x['buildingOrders']);
         }
         if($village->getOnDemolishBuildingFieldId()) {
             $x['demolish'] = TRUE;

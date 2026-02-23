@@ -200,7 +200,7 @@ class NachrichtenCtrl extends GameCtrl
             $view->vars['note'] = Session::getInstance()->getNote();
             $view->vars['info'] = '';
             if (isset($_POST['notepad'])) {
-                $_POST['notepad'] = filter_var($_POST['notepad'], FILTER_SANITIZE_STRING);
+                $_POST['notepad'] = sanitize_string($_POST['notepad']);
                 $m = new MessageModel();
                 if ($m->setNote(Session::getInstance()->getPlayerId(), $_POST['notepad'])) {
                     $view->vars['note'] = $_POST['notepad'];
@@ -350,13 +350,13 @@ class NachrichtenCtrl extends GameCtrl
         $maxRecipient = $InadmissibleMessage = $spam = $banned = $longSubject = $morePopRequired = $spam2 = false;
         if (WebService::isPost() && isset($_REQUEST['c']) && $_REQUEST['c'] == Session::getInstance()->getChecker()) {
             Session::getInstance()->changeChecker();
-            $_REQUEST['an'] = filter_var($_REQUEST['an'], FILTER_SANITIZE_STRING);
-            $_REQUEST['be'] = filter_var($_REQUEST['be'], FILTER_SANITIZE_STRING);
+            $_REQUEST['an'] = sanitize_string($_REQUEST['an']);
+            $_REQUEST['be'] = sanitize_string($_REQUEST['be']);
             $_REQUEST['be'] = mb_substr($_REQUEST['be'], 0, min(45, strlen($_REQUEST['be'])));
             if (empty($_REQUEST['be'])) {
                 $_REQUEST['be'] = T("Messages", "no subject");
             }
-            $_REQUEST['message'] = filter_var($_REQUEST['message'], FILTER_SANITIZE_STRING);
+            $_REQUEST['message'] = sanitize_string($_REQUEST['message']);
             if (Session::getInstance()->isSitter()) {
                 $playerName = $m->getPlayerName(Session::getInstance()->getSitterUID());
                 $_REQUEST['message'] = sprintf(T("Messages", "WrittenBySitter%s"),
@@ -365,7 +365,7 @@ class NachrichtenCtrl extends GameCtrl
             $longSubject = strlen($_REQUEST['be']) > 45;
             if ($longSubject) goto process;
             $recipients = array_unique(array_map("trim", explode(";", $_REQUEST['an'])));
-            $maxRecipient = sizeof($recipients) > getDisplay("maximumMultiMessageSendNum");
+            $maxRecipient = count($recipients) > getDisplay("maximumMultiMessageSendNum");
             if ($maxRecipient) goto process;
             $InadmissibleMessage = Session::getInstance()->getPlayerId() > 2 && (!StringChecker::isValidName($_REQUEST['be']) || !StringChecker::isValidMessage($_REQUEST['message']));
             if ($InadmissibleMessage) goto process;

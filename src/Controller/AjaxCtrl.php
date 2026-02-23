@@ -22,7 +22,7 @@ class AjaxCtrl extends AnyCtrl
         parent::__construct();
         $response = ["response" => ['error' => FALSE, 'errorMsg' => NULL, 'data' => [],],];
         if (isset($_GET['cmd'])) {
-            $cmd = filter_var($_GET['cmd'], FILTER_SANITIZE_STRING);
+            $cmd = sanitize_string($_GET['cmd']);
             $response = ["response" => ['error' => FALSE, 'errorMsg' => NULL, 'data' => [],],];
             if (!in_array($cmd, ['news', 'configuration'])) {
                 $this->checkAjaxToken($response);
@@ -49,8 +49,7 @@ class AjaxCtrl extends AnyCtrl
     function checkAjaxToken(&$response)
     {
         return true;
-        if (!isset($_POST['ajaxToken']) || filter_var($_POST['ajaxToken'],
-                FILTER_SANITIZE_STRING) != $this->session->getAjaxToken()) {
+        if (!isset($_POST['ajaxToken']) || sanitize_string($_POST['ajaxToken']) != $this->session->getAjaxToken()) {
             $response['ajaxToken'] = NULL;
             $response['response']['error'] = TRUE;
             $response['response']['errorMsg'] = 'Invalid token.';

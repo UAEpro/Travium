@@ -138,7 +138,7 @@ class NoticeHelper
     public static function convertReportX($report_type, array $reportArray)
     {
         $filterString = function ($t) {
-            return str_replace(['|', ','], null, $t);
+            return str_replace(['|', ','], '', $t);
         };
         $stringArr = [];
         if ($report_type >= 11 && $report_type <= 14) {
@@ -236,7 +236,7 @@ class NoticeHelper
             $sectionArr[] = isset($reportArray['info']['cata'][0]) ? implode(",", $reportArray['info']['cata'][0]) : null;
             $sectionArr[] = isset($reportArray['info']['cata'][1]) ? implode(",", $reportArray['info']['cata'][1]) : null;
             $sectionArr[] = isset($reportArray['info']['rams']) ? implode(",", $reportArray['info']['rams']) : null;
-            if (isset($reportArray['info']['protectedByArtifact']) && sizeof($reportArray['info']['protectedByArtifact'])) {
+            if (isset($reportArray['info']['protectedByArtifact']) && count($reportArray['info']['protectedByArtifact'])) {
                 $sectionArr[] = implode("/", array_map(function ($x) {
                     return implode(",", array_values($x));
                 }, $reportArray['info']['protectedByArtifact']));
@@ -421,7 +421,7 @@ class NoticeHelper
             }
             if ($section[8] != "") {
                 $reportArray['info']['oasisCapture'] = explode(',', $section[8]);
-                if (sizeof($reportArray['info']['oasisCapture']) == 1) {
+                if (count($reportArray['info']['oasisCapture']) == 1) {
                     $reportArray['info']['oasisCapture'] = $reportArray['info']['oasisCapture'][0];
                 }
             }
@@ -436,7 +436,7 @@ class NoticeHelper
             }
             if ($section[12] != "") {
                 $reportArray['info']['captureResult'] = explode(",", $section[12]);
-                if (sizeof($reportArray['info']['captureResult']) == 1) {
+                if (count($reportArray['info']['captureResult']) == 1) {
                     $reportArray['info']['captureResult'] = $reportArray['info']['captureResult'][0];
                 }
             }

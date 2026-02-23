@@ -45,10 +45,10 @@ class ProfileModel
 
     public function updateProfile($uid, $desc1, $desc2, $birthday, $gender, $location, $showCountryFlag, $showMedals)
     {
-        $desc1 = filter_var($desc1, FILTER_SANITIZE_STRING);
-        $desc2 = filter_var($desc2, FILTER_SANITIZE_STRING);
-        $birthday = filter_var($birthday, FILTER_SANITIZE_STRING);
-        $location = filter_var($location, FILTER_SANITIZE_STRING);
+        $desc1 = sanitize_string($desc1);
+        $desc2 = sanitize_string($desc2);
+        $birthday = sanitize_string($birthday);
+        $location = sanitize_string($location);
         if (!StringChecker::isValidMessage($desc1) || !StringChecker::isValidMessage($desc2) || !StringChecker::isValidName($location)) {
             return;
         }
@@ -67,7 +67,7 @@ class ProfileModel
 
     public function updateVillageName($kid, $name)
     {
-        $name = clean_string_from_white(filter_var($name, FILTER_SANITIZE_STRING));
+        $name = clean_string_from_white(sanitize_string($name));
         if (!StringChecker::isValidName($name)) {
             return;
         } else if (strlen($name) > 45) {

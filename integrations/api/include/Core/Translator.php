@@ -45,7 +45,7 @@ class Translator
     public static function setLanguage($locale, $restoreDefault = false)
     {
         $locale = explode("-", $locale);
-        if(sizeof($locale) <> 2){
+        if(count($locale) <> 2){
             throw new ErrorException("Invalid locale \"$locale\"");
         }
         list($language, $country) = $locale;

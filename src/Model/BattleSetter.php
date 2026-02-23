@@ -405,7 +405,7 @@ class BattleSetter
         $defender['storeIds'] = [];
         $defender['crannyIds'] = [];
         $defender['buildings'] = (new VillageModel())->getBuildingsAssoc($kid);
-        if (!sizeof($defender['buildings'])) {
+        if (!count($defender['buildings'])) {
             logError("No defender buildings.");
         }
         for ($i = 19; $i <= 40; ++$i) {

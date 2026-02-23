@@ -189,7 +189,7 @@ class premiumFeature extends AjaxBase
         while ($row = $result->fetch_assoc()) {
             $locations[$row['id']] = $row;
         }
-        $selectedLocation = isset($_REQUEST['goldProductLocation']) && !empty($_REQUEST['goldProductLocation']) ? (int)$_REQUEST['goldProductLocation'] : isset($_SESSION[Session::getInstance()->fixSessionPrefix('default_payment_location')]) ? $_SESSION[Session::getInstance()->fixSessionPrefix('default_payment_location')] : $def;
+        $selectedLocation = (isset($_REQUEST['goldProductLocation']) && !empty($_REQUEST['goldProductLocation'])) ? (int)$_REQUEST['goldProductLocation'] : (isset($_SESSION[Session::getInstance()->fixSessionPrefix('default_payment_location')]) ? $_SESSION[Session::getInstance()->fixSessionPrefix('default_payment_location')] : $def);
         $Found = FALSE;
         foreach ($locations as $location) {
             if ($location['id'] == $selectedLocation) {
@@ -215,7 +215,7 @@ class premiumFeature extends AjaxBase
         $view->vars['goldProductMoneyUnit'] = $product['goldProductMoneyUnit'];
         $view->vars['goldProductImageName'] = $product['goldProductImageName'];
         $ex = explode(".", $product['goldProductPrice']);
-        $decimals = sizeof($ex) == 1 ? 0 : strlen($ex[1]);
+        $decimals = count($ex) == 1 ? 0 : strlen($ex[1]);
         $price = number_format($product['goldProductPrice'], $decimals, '.', ',');
         $view->vars['Price'] = $price;
         $data['options']['html'] = $view->output();
@@ -773,8 +773,8 @@ class premiumFeature extends AjaxBase
         if (Session::getInstance()->getTotalPopulation() >= $config->gold->changeName->impossibleAfterPopulation) {
             return;
         }
-        $newName = filter_var($_POST['accountNewName'], FILTER_SANITIZE_STRING);
-        $password = sha1(filter_var($_POST['accountPassword'], FILTER_SANITIZE_STRING));
+        $newName = sanitize_string($_POST['accountNewName']);
+        $password = sha1(sanitize_string($_POST['accountPassword']));
         if (empty($newName) || empty($password)) {
             $this->response['error'] = TRUE;
             $this->response['errorMsg'] = T("Options", "Please enter a new account name and confirmation password");

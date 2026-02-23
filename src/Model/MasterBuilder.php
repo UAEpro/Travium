@@ -259,7 +259,7 @@ class MasterBuilder
             }
             $previous_commence += $commence - time();
         }
-        if (sizeof($queryBatch)) {
+        if (count($queryBatch)) {
             foreach ($queryBatch as $query) {
                 $db->query($query);
             }

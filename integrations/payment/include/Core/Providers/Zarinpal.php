@@ -21,7 +21,7 @@ class Zarinpal
                 'Description' => PaymentHelper::getPackageInfo($paymentLog['id'], $paymentLog['worldUniqueId'], $productData['goldProductName'], $paymentLog['uid']),
                 'Email' => null,
                 'Mobile' => null,
-                'CallbackURL' => WebService::get_real_base_url() . 'process/index.php?METHOD=onProviderReturn&ORDER=' . filter_var($_REQUEST['ORDER'], FILTER_SANITIZE_STRING),
+                'CallbackURL' => WebService::get_real_base_url() . 'process/index.php?METHOD=onProviderReturn&ORDER=' . sanitize_string($_REQUEST['ORDER']),
             ]
         );
         if ($result->Status == 100) {

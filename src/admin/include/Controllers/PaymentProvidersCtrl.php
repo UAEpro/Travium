@@ -61,11 +61,11 @@ class PaymentProvidersCtrl
         if (WebService::isPost() && Session::validateChecker()) {
             $params['provider_location'] = (int)$_POST['provider_location'];
             $params['provider_type'] = (int)$_POST['provider_type'];
-            $params['provider_name'] = filter_var(trim($_POST['provider_name']), FILTER_SANITIZE_STRING);
+            $params['provider_name'] = sanitize_string(trim($_POST['provider_name']));
             $params['provider_description'] = trim($_POST['provider_description']);
-            $params['provider_image'] = filter_var($_POST['provider_image'], FILTER_SANITIZE_STRING);
-            $params['provider_connectInfo'] = filter_var($_POST['provider_connectInfo'], FILTER_SANITIZE_STRING);
-            $params['provider_delivery'] = filter_var($_POST['provider_delivery'], FILTER_SANITIZE_STRING);
+            $params['provider_image'] = sanitize_string($_POST['provider_image']);
+            $params['provider_connectInfo'] = sanitize_string($_POST['provider_connectInfo']);
+            $params['provider_delivery'] = sanitize_string($_POST['provider_delivery']);
             $params['provider_hidden'] = (int)$_POST['provider_hidden'];
             $params['provider_isProviderLoadedByHTML'] = (int)$_POST['provider_isProviderLoadedByHTML'];
             if (empty($params['provider_name']) || empty($params['provider_image']) || empty($params['provider_description'])) {
@@ -110,11 +110,11 @@ class PaymentProvidersCtrl
         if (WebService::isPost() && Session::validateChecker()) {
             $params['provider_location'] = (int)$_POST['provider_location'];
             $params['provider_type'] = (int)$_POST['provider_type'];
-            $params['provider_name'] = filter_var(trim($_POST['provider_name']), FILTER_SANITIZE_STRING);
+            $params['provider_name'] = sanitize_string(trim($_POST['provider_name']));
             $params['provider_description'] = trim($_POST['provider_description']);
-            $params['provider_image'] = filter_var(trim($_POST['provider_image']), FILTER_SANITIZE_STRING);
-            $params['provider_connectInfo'] = filter_var($_POST['provider_connectInfo'], FILTER_SANITIZE_STRING);
-            $params['provider_delivery'] = filter_var($_POST['provider_delivery'], FILTER_SANITIZE_STRING);
+            $params['provider_image'] = sanitize_string(trim($_POST['provider_image']));
+            $params['provider_connectInfo'] = sanitize_string($_POST['provider_connectInfo']);
+            $params['provider_delivery'] = sanitize_string($_POST['provider_delivery']);
             $params['provider_hidden'] = (int)$_POST['provider_hidden'];
             $params['provider_isProviderLoadedByHTML'] = (int)$_POST['provider_isProviderLoadedByHTML'];
             if (empty($params['provider_name']) || empty($params['provider_image']) || empty($params['provider_description'])) {

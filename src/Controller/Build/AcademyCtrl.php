@@ -66,7 +66,7 @@ class AcademyCtrl extends AnyCtrl
         $this->getSoonAvailableResearches();
         $helper = new GoldHelper();
         $this->view->vars['finishNowButton'] = $helper->finishNowButton();
-        if(!sizeof($this->researches['available'])) {
+        if(!count($this->researches['available'])) {
             $this->view->vars['researchAllButton'] = null;
         } else {
             $this->view->vars['researchAllButton'] = ExtraModules::showButton("academyResearchAll");
@@ -81,7 +81,7 @@ class AcademyCtrl extends AnyCtrl
         while($row = $researching->fetch_assoc()) {
             $this->researching[$row['nr']] = $row;
         }
-        $this->view->vars['researchingSize'] = sizeof($this->researching);
+        $this->view->vars['researchingSize'] = count($this->researching);
     }
 
     private function getAvailableResearches($index)
@@ -89,7 +89,7 @@ class AcademyCtrl extends AnyCtrl
         $village = Village::getInstance();
         $this->view->vars['availableResearches'] = '';
         $_template = new PHPBatchView("build/AcademyResearch");
-        $size = sizeof($this->researches['available']);
+        $size = count($this->researches['available']);
         $helper = new GoldHelper();
         foreach($this->researches['available'] as $nr) {
             --$size;
@@ -120,7 +120,7 @@ class AcademyCtrl extends AnyCtrl
     {
         $this->view->vars['soonAvailableResearches'] = '';
         $_template = new PHPBatchView("build/AcademyResearch");
-        $size = sizeof($this->researches['soon']);
+        $size = count($this->researches['soon']);
         foreach($this->researches['soon'] as $nr) {
             --$size;
             $unitId = nrToUnitId($nr, Session::getInstance()->getRace());
@@ -128,7 +128,7 @@ class AcademyCtrl extends AnyCtrl
             $duration = Formulas::uResearchTime($unitId);
             $breq = Formulas::uResearchPreRequests(Session::getInstance()->getRace(), $nr);
             $requirements = '';
-            $size2 = sizeof($breq);
+            $size2 = count($breq);
             foreach($breq as $bid => $level) {
                 --$size2;
                 $rLevel = Village::getInstance()->getTypeLevel($bid);
@@ -175,8 +175,8 @@ class AcademyCtrl extends AnyCtrl
             $breq = Formulas::uResearchPreRequests(Session::getInstance()->getRace(), $u);
             $researches[$this->_canDoResearch($breq) ? "available" : "soon"][$u] = $u;
         }
-        $this->view->vars['availableSize'] = sizeof($researches['available']);
-        $this->view->vars['soonAvailableSize'] = sizeof($researches['soon']);
+        $this->view->vars['availableSize'] = count($researches['available']);
+        $this->view->vars['soonAvailableSize'] = count($researches['soon']);
         $this->researches = $researches;
     }
 

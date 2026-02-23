@@ -79,7 +79,7 @@ class mapMultiMarkAdd extends AjaxBase
             $this->response['data']['markId'] = $kid;
             $this->response['data']['owner'] = $owner;
             $this->response['data']['position'] = $kid;
-            $this->response['data']['text'] = filter_var($targetName, FILTER_SANITIZE_STRING);
+            $this->response['data']['text'] = sanitize_string($targetName);
             if ($owner == 'alliance') {
                 Map::removeMapCacheForAlliance(Session::getInstance()->getAllianceId(), $type, $targetId);
             } else {

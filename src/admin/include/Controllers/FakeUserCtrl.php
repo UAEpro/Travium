@@ -12,7 +12,7 @@ class FakeUserCtrl
             set_time_limit(0);
             ignore_user_abort(true);
             $m = new RegisterModel();
-            $result = $m->addFakeUser(filter_var($_POST['names'], FILTER_SANITIZE_STRING));
+            $result = $m->addFakeUser(sanitize_string($_POST['names']));
         }
         Dispatcher::getInstance()->appendContent(Template::getInstance()->load(['result' => $result], 'tpl/fakeUser.tpl')->getAsString());
     }

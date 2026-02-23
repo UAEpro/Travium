@@ -60,7 +60,7 @@ class reportRightsSet extends AjaxBase
         if ($_POST['data']['right4'] === 'true') {
             $prm |= RIGHT_HIDE_OPPONENT_TROOPS;
         }
-        $desc = filter_var($_POST['data']['description'], FILTER_SANITIZE_STRING);
+        $desc = sanitize_string($_POST['data']['description']);
         $data['permissions'] = ["prem" => $prm, "desc" => $desc];
         $data = $db->real_escape_string(NoticeHelper::convertReport($row['type'], $data));
         $db->query("UPDATE ndata SET data='$data' WHERE id=$reportId") or die("failed!");

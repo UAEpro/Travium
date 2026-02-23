@@ -71,7 +71,7 @@ class PayGol
 
     public function processIpn()
     {
-        list($orderId, $orderSecureId) = explode('-', filter_var($_REQUEST['custom'] ?? null, FILTER_SANITIZE_STRING));
+        list($orderId, $orderSecureId) = explode('-', sanitize_string($_REQUEST['custom'] ?? null));
         $paymentLog = PaymentHelper::getOrder($orderId, $orderSecureId);
         if ($paymentLog === FALSE) {
             return;

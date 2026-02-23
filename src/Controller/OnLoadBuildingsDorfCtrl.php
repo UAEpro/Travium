@@ -87,7 +87,7 @@ class OnLoadBuildingsDorfCtrl extends AnyCtrl
                 }
                 $costs = Formulas::buildingUpgradeCosts($item_id, $level);
                 $duration = '';
-                if (sizeof($json) === 0 && $ti && ($village->isWW() || $village->getProduction(3) > 0 || $costs[3] <= $village->getCurrentResources(3))) {
+                if (count($json) === 0 && $ti && ($village->isWW() || $village->getProduction(3) > 0 || $costs[3] <= $village->getCurrentResources(3))) {
                     $ti = FALSE;
                     $timeLeft = sprintf(T("Global", "General.startat") . ' %s',
                         appendTimer($row['commence'] - time()) . " ");
@@ -116,7 +116,7 @@ HTML;
             $helper = new GoldHelper();
             $this->view = new PHPBatchView('dorf1/buildingQueue');
             $this->view->vars = [
-                'normal' => sizeof($village->onLoadBuildings['normal']),
+                'normal' => count($village->onLoadBuildings['normal']),
                 'buildings' => $HTML,
                 'finishNowButton' => $helper->finishNowButton(),
                 'buildsJson' => json_encode($json),

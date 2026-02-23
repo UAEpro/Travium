@@ -16,7 +16,7 @@ if ($page == ('?' . $_SERVER['QUERY_STRING'])) {
     $page = '/';
 }
 
-$uriCheck = str_replace(['?', $_SERVER['QUERY_STRING'], '/'], null, $uri) == $page;
+$uriCheck = str_replace(['?', $_SERVER['QUERY_STRING'], '/'], '', $uri) == $page;
 if(!$uriCheck){
     $page = '404';
 }

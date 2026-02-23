@@ -5,7 +5,7 @@ class tabFavorite extends AjaxBase
 {
     public function dispatch()
     {
-        $name = filter_var($_POST['name'], FILTER_SANITIZE_STRING);
+        $name = sanitize_string($_POST['name']);
         $numberStr = ($_POST['number']);
         $number = (int)$numberStr;
         $session = Session::getInstance();

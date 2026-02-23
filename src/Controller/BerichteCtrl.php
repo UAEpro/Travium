@@ -8,7 +8,6 @@ use Core\Helper\PageNavigator;
 use Core\Helper\TimezoneHelper;
 use Core\Helper\WebService;
 use Core\Session;
-use const FILTER_SANITIZE_STRING;
 use function filter_var;
 use Game\Formulas;
 use Game\Hero\HeroItems;
@@ -126,9 +125,9 @@ class BerichteCtrl extends GameCtrl
 
     private function filter_reportId($id)
     {
-        $id = filter_var($id, FILTER_SANITIZE_STRING);
+        $id = sanitize_string($id);
         $split = explode("|", $id);
-        if (sizeof($split) === 2) {
+        if (count($split) === 2) {
             return [filter_var($split[0], FILTER_SANITIZE_NUMBER_INT), $split[1]];
         }
         return [filter_var($id, FILTER_SANITIZE_NUMBER_INT), null];
@@ -182,7 +181,7 @@ class BerichteCtrl extends GameCtrl
             'selectedTabIndex' => $this->selectedTabIndex,
         ];
         if (isset($_GET['id'])) {
-            $this->view->newVillagePrefix['id'] = filter_var($_GET['id'], FILTER_SANITIZE_STRING);
+            $this->view->newVillagePrefix['id'] = sanitize_string($_GET['id']);
         }
         $isAttackOrSpy = false;
         switch ($notice['type']) {
@@ -397,7 +396,7 @@ class BerichteCtrl extends GameCtrl
                     $headline = $this->getPlayerHeadline($data['attacker']['uid'], $notice['kid'], $data['attacker']['uname'], true);
                 }
                 $view->vars['content'] .= $this->renderTroopsTable($notice, $data, $data['attacker']['uid'], false, T("Reports", "Attacker"), $headline, $data['attacker']['race'], $data['attacker']['num'], $data['attacker']['dead'], isset($data['attacker']['trapped']) ? $data['attacker']['trapped'] : null, $this->renderAttackerInfos($notice, $data, true), $view->vars);
-                $size = sizeof($data['defender']);
+                $size = count($data['defender']);
                 $hideUnits = false;
                 if (isset($data['info']['none_return']) && $this->authType == self::AUTH_TYPE_ALLIANCE) {
                     $size = 1;
@@ -461,7 +460,7 @@ class BerichteCtrl extends GameCtrl
                 }
                 $view->vars['content'] .= $this->renderTroopsTable($notice, $data, $data['attacker']['uid'], false, T("Reports", "Attacker"), $headline, $data['attacker']['race'], $data['attacker']['num'], $data['attacker']['dead'], isset($data['attacker']['trapped']) ? $data['attacker']['trapped'] : null, $this->renderAttackerInfos($notice, $data), $view->vars);
                 if (isset($data['defender'])) {
-                    $size = sizeof($data['defender']);
+                    $size = count($data['defender']);
                     $hideUnits = false;
                     if (array_key_exists('losses', $data)) {
                         if ($this->authType == self::AUTH_TYPE_ALLIANCE && $data['losses'][1] < 0.25) {
@@ -1148,7 +1147,7 @@ class BerichteCtrl extends GameCtrl
             }
         }
         $content = '<table class="additionalInformation">';
-        if (sizeof($information)) {
+        if (count($information)) {
             $content .= '<tbody class="infos">';
             $index = 0;
             foreach ($information as $info) {
@@ -1158,7 +1157,7 @@ class BerichteCtrl extends GameCtrl
             }
             $content .= '</tbody>';
         }
-        if (sizeof($goods)) {
+        if (count($goods)) {
             $index = 0;
             foreach ($goods as $good) {
                 $content .= '<tbody class="goods">';

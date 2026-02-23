@@ -57,7 +57,7 @@ class FarmListModel
             while ($row = $farms->fetch_assoc()) {
                 $distance = Formulas::getDistance($kid, $row['kid']);
                 $batch[] = '(' . $lid . ', ' . $row['kid'] . ', ' . $distance . ', 500000,0,0,0,0,0,0,0,0,0)';
-                if (sizeof($batch) >= 100) {
+                if (count($batch) >= 100) {
                     $query = 'INSERT INTO raidlist(lid, kid, distance, u1, u2, u3, u4, u5, u6, u7, u8, u9, u10) VALUES ' . implode(",",
                             $batch);
                     $db->query($query);

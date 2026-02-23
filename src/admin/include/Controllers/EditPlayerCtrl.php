@@ -204,7 +204,7 @@ class EditPlayerCtrl
                 $kids[] = $row['kid'];
                 Map::villageDestroyOrCaptureOrNewVillageUpdate($row['kid']);
             }
-            if (sizeof($kids)) {
+            if (count($kids)) {
                 $implode = implode(",", $kids);
                 $db->query("UPDATE enforcement SET race=$race WHERE kid IN($implode)");
                 $db->query("UPDATE movement SET race=$race WHERE kid IN($implode) OR (to_kid IN($implode) AND mode=1)");

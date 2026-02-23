@@ -395,18 +395,18 @@ class InstallerModel
                 $oasisId = 0;
             }
         }
-        if (sizeof($queryBatch)) {
+        if (count($queryBatch)) {
             $db->query("INSERT INTO wdata (id, x, y, fieldtype, oasistype, landscape, crop_percent, occupied, map) VALUES " . implode(",",
                     $queryBatch));
         }
-        if (sizeof($queryBatchUnits)) {
+        if (count($queryBatchUnits)) {
             $db->query("INSERT INTO units (kid, race) VALUES " . implode(",", $queryBatchUnits));
         }
-        if (sizeof($queryBatchOases)) {
+        if (count($queryBatchOases)) {
             $db->query("INSERT INTO odata (`kid`, `type`, `wood`, `iron`, `clay`, `crop`, `lastmupdate`) VALUES " . implode(",",
                     $queryBatchOases));
         }
-        if (sizeof($queryBatchVillages)) {
+        if (count($queryBatchVillages)) {
             $db->query("INSERT INTO available_villages (kid, fieldtype, r, angle, rand) VALUES " . implode(",",
                     $queryBatchVillages));
         }
@@ -1041,7 +1041,7 @@ class InstallerModel
 
     private function createWald()
     {
-        if (sizeof($this->layouts['wald']) != 25) {
+        if (count($this->layouts['wald']) != 25) {
             echo 'walds are not available due change of layout sizes.';
             exit();
         }
@@ -1586,7 +1586,7 @@ class InstallerModel
                 $emails = [];
             }
         }
-        if (sizeof($emails)) {
+        if (count($emails)) {
             Mailer::sendBatch($emails, $newsletter_subject, $newsletter_message);
             $emails = [];
         }*/

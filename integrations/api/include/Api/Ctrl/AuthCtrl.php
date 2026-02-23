@@ -11,7 +11,6 @@ use Database\ServerDB;
 use Exceptions\MissingParameterException;
 use PDO;
 use const FILTER_SANITIZE_EMAIL;
-use const FILTER_SANITIZE_STRING;
 use function filter_var;
 
 class AuthCtrl extends ApiAbstractCtrl
@@ -36,7 +35,7 @@ class AuthCtrl extends ApiAbstractCtrl
             return;
         }
         $this->response['success'] = false;
-        $this->payload['recoveryCode'] = filter_var($this->payload['recoveryCode'], FILTER_SANITIZE_STRING);
+        $this->payload['recoveryCode'] = sanitize_string($this->payload['recoveryCode']);
         $recovery = $this->findRecoveryByRecoveryCode(
             (int)$this->payload['uid'], (int)$server['id'], $this->payload['recoveryCode']);
         if ($recovery) {
@@ -96,7 +95,7 @@ class AuthCtrl extends ApiAbstractCtrl
                 ];
             }
         }
-        if (!sizeof($gameWorlds)) {
+        if (!count($gameWorlds)) {
             $this->response['fields']['email'] = 'noAccountsAssociatedWithEmailAddress';
             return;
         }

@@ -63,7 +63,7 @@ class OasesModel
         }
         for($i = 1; $i <= $num; ++$i){
             shuffle($troops);
-            $unitId = $troops[mt_rand(0, sizeof($troops) - 1)];
+            $unitId = $troops[mt_rand(0, count($troops) - 1)];
             $amount = mt_rand(1, 3);
             $db->query("UPDATE units SET u{$unitId}=u{$unitId}+$amount WHERE kid=$kid");
 
@@ -223,7 +223,7 @@ class OasesModel
 //                    }
 //                }
 
-                $i = $troops[$oases['type']][mt_rand(0, sizeof($troops[$oases['type']]) - 1)];
+                $i = $troops[$oases['type']][mt_rand(0, count($troops[$oases['type']]) - 1)];
                 $troopsCount = array_sum($currentTroops) + array_sum($units);
                 if ($troopsCount < 12 * $tm) {
                     $units[$i] += $rate * mt_rand(1, 3);

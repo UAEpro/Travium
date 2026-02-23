@@ -7,7 +7,7 @@ class infoboxSetReaded extends AjaxBase
 	public function dispatch()
 	{
 		$infoIds = (array)$_POST['infoIds'];
-		if(!sizeof($infoIds)) {
+		if(!count($infoIds)) {
 			return;
 		}
 		foreach($infoIds as $key => &$value) {

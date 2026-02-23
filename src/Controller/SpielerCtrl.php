@@ -50,7 +50,7 @@ class SpielerCtrl extends GameCtrl
         $m = new ProfileModel();
         $this->selectedPlayerData = $m->getPlayer($this->selectedPlayerID,
             "aid, access, email_verified, countryFlag, showMedals, profileCacheVersion, showCountryFlag, email, name, race, desc1, desc2, gender, birthday, location, protection");
-        if (!sizeof($this->selectedPlayerData)) {
+        if (!count($this->selectedPlayerData)) {
             return;
         }
         if ($this->selectedPlayerID == Session::getInstance()->getPlayerId()) {
@@ -98,7 +98,7 @@ class SpielerCtrl extends GameCtrl
                     $this->selectedPlayerData['showCountryFlag'] = isset($_POST['showCountryFlag']) && (int)$_POST['showCountryFlag'] == 1 && $this->serverIsPromoted ? 1 : 0;
                     foreach ($_POST['dname'] as $kid => $name) {
                         $name = str_replace("'", '`', $name);
-                        $name = filter_var($name, FILTER_SANITIZE_STRING);
+                        $name = sanitize_string($name);
                         if (empty($name)) {
                             continue;
                         }

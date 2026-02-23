@@ -86,7 +86,7 @@ class PreferencesHelper
             case 'reports_tab2':
             case 'reports_tab3':
             case 'reports_tab6':
-                //$session_cookie_value[$key] = filter_var($value, FILTER_SANITIZE_STRING);
+                //$session_cookie_value[$key] = sanitize_string($value);
                 break;
             case 'travian_toggle_hero':
             case 'travian_toggle_infobox':

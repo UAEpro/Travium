@@ -25,7 +25,7 @@ class TransferGoldModel
 
     public function getPlayerIdByName($name)
     {
-        $name = filter_var($name, FILTER_SANITIZE_STRING);
+        $name = sanitize_string($name);
         $db = DB::getInstance();
         $name = $db->real_escape_string($name);
         return $db->fetchScalar("SELECT id FROM users WHERE name='$name'");

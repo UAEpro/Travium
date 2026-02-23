@@ -188,7 +188,7 @@ class MessageModel
 
     public function getPlayerIdByName($name)
     {
-        $name = filter_var($name, FILTER_SANITIZE_STRING);
+        $name = sanitize_string($name);
         $db = DB::getInstance();
         $name = $db->real_escape_string($name);
         return $db->fetchScalar("SELECT id FROM users WHERE name='$name'");
@@ -239,7 +239,7 @@ class MessageModel
         return $md5_checksum;
     }
 
-    public function checkLastMessage($uid, $banned, $to_uid = FALSE, $subject, $text)
+    public function checkLastMessage($uid, $banned, $to_uid, $subject, $text)
     {
         if ($to_uid !== FALSE && $to_uid <= 2) {
             return TRUE;
@@ -266,7 +266,7 @@ class MessageModel
         while ($row = $find->fetch_assoc()) {
             $ignoreList[] = $row['ignore_id'];
         }
-        $filter = sizeof($ignoreList) ? "AND uid NOT IN(" . implode(",", $ignoreList) . ")" : '';
+        $filter = count($ignoreList) ? "AND uid NOT IN(" . implode(",", $ignoreList) . ")" : '';
 
         return $db->query("SELECT * FROM mdata WHERE delete_receiver=0 AND archived=0 AND to_uid=$uid $filter ORDER BY id " . ($order ? "ASC" : "DESC") . " LIMIT " . (($page - 1) * Session::getInstance()->getReportsRecordsPerPage()) . ", " . Session::getInstance()->getReportsRecordsPerPage());
     }
@@ -293,7 +293,7 @@ class MessageModel
         while ($row = $find->fetch_assoc()) {
             $ignoreList[] = $row['ignore_id'];
         }
-        $filter = sizeof($ignoreList) ? "AND uid NOT IN(" . implode(",", $ignoreList) . ")" : '';
+        $filter = count($ignoreList) ? "AND uid NOT IN(" . implode(",", $ignoreList) . ")" : '';
 
         return $db->fetchScalar("SELECT COUNT(id) FROM mdata WHERE delete_receiver=0 AND archived=0 AND to_uid=$uid $filter");
     }
@@ -306,7 +306,7 @@ class MessageModel
         while ($row = $find->fetch_assoc()) {
             $ignoreList[] = $row['ignore_id'];
         }
-        $filter = sizeof($ignoreList) ? "AND uid NOT IN(" . implode(",", $ignoreList) . ")" : '';
+        $filter = count($ignoreList) ? "AND uid NOT IN(" . implode(",", $ignoreList) . ")" : '';
 
         return $db->query("SELECT * FROM mdata WHERE delete_receiver=0 AND archived=1 AND to_uid=$uid $filter ORDER BY id " . ($order ? "ASC" : "DESC") . " LIMIT " . (($page - 1) * Session::getInstance()->getReportsRecordsPerPage()) . ", " . Session::getInstance()->getReportsRecordsPerPage());
     }
@@ -319,7 +319,7 @@ class MessageModel
         while ($row = $find->fetch_assoc()) {
             $ignoreList[] = $row['ignore_id'];
         }
-        $filter = sizeof($ignoreList) ? "AND uid NOT IN(" . implode(",", $ignoreList) . ")" : '';
+        $filter = count($ignoreList) ? "AND uid NOT IN(" . implode(",", $ignoreList) . ")" : '';
 
         return $db->fetchScalar("SELECT COUNT(id) FROM mdata WHERE delete_receiver=0 AND archived=1 AND to_uid=$uid $filter");
     }

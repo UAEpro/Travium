@@ -414,7 +414,7 @@ class BattleModel
             $random_artifact = $this->model->randomTargetArtifact($this->defender['uid'], $this->row['to_kid']);
             $village = new VillageModel();
             $cap = $village->getCapBrewery($this->attacker['uid']);
-            for ($i = 0; $i < sizeof($targets); ++$i) {
+            for ($i = 0; $i < count($targets); ++$i) {
                 if ($random_artifact) {
                     $ignore = $random_artifact < 3 ? [27, 40] : [40];
                     if (in_array($this->row['ctar' . ($i + 1)], $ignore)) {
@@ -818,7 +818,7 @@ class BattleModel
             $modify[] = "u{$nr}=u{$nr}-" . $num;
         }
         $db = DB::getInstance();
-        if (sizeof($modify)) {
+        if (count($modify)) {
             $db->query("UPDATE units SET " . implode(",", $modify) . " WHERE kid={$this->row['to_kid']}");
         }
         $num = $this->attacker['wave']['heroItems']['bag']['num'];
@@ -1535,11 +1535,11 @@ class BattleModel
             if ($value['isEnforce']) {
                 if (!($total - array_sum($value['units']['dead']))) {
                     $db->query("DELETE FROM enforcement WHERE id=" . $value['uniqueId']);
-                } else if (sizeof($modify)) {
+                } else if (count($modify)) {
                     $set = implode(",", $modify);
                     $db->query("UPDATE enforcement SET $set WHERE id=" . $value['uniqueId']);
                 }
-            } else if (sizeof($modify)) {
+            } else if (count($modify)) {
                 $set = implode(",", $modify);
                 $db->query("UPDATE units SET $set WHERE kid=" . $value['uniqueId']);
             }
@@ -2093,7 +2093,7 @@ class BattleModel
         $uid = array_unique($uid);
         $tmp = $report;
         unset($tmp['info']['escape']);
-        if (sizeof($uid) >= 20 && $reportType == NoticeHelper::TYPE_LOST_AS_DEFENDER_WITHOUT_CASUALTIES) {
+        if (count($uid) >= 20 && $reportType == NoticeHelper::TYPE_LOST_AS_DEFENDER_WITHOUT_CASUALTIES) {
             //do nothing
         } else {
             foreach ($uid as $u) {
@@ -2243,7 +2243,7 @@ class BattleModel
                     $targets[] = $key;
                 }
             }
-            $size = sizeof($targets);
+            $size = count($targets);
             if ($size) {
                 shuffle($targets);
                 if ($size == 1) {
@@ -2258,11 +2258,11 @@ class BattleModel
                 $free[] = $k;
             }
         }
-        if (!sizeof($free)) {
+        if (!count($free)) {
             return 0;
         }
         shuffle($free);
-        $find = $free[mt_rand(0, sizeof($free) - 1)];
+        $find = $free[mt_rand(0, count($free) - 1)];
         return $find ? $find : 0;
     }
 

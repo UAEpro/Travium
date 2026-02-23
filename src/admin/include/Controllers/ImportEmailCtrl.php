@@ -23,7 +23,7 @@ class ImportEmailCtrl
             }
             $db = GlobalDB::getInstance();
             $db->query("INSERT IGNORE INTO `newsletter` (`email`, `private_key`) VALUES " . implode(",", $batchAdd));
-            $params['result'] = sizeof($batchAdd);
+            $params['result'] = count($batchAdd);
             $batchAdd = null;
             Notification::notify("Emails added", "{$params['result']} added to newsletter.");
         }

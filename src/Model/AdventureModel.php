@@ -99,7 +99,7 @@ class AdventureModel
             }
         } else {
             $intervals = $this->getAdventureIntervals();
-            $size = sizeof($intervals);
+            $size = count($intervals);
             for ($i = $size; $i >= 1; --$i) {
                 $previous = isset($intervals[$i - 1]['time']) ? $intervals[$i - 1]['time'] : 0;
                 if ($seconds_past > $previous) {

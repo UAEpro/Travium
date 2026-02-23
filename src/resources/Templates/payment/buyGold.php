@@ -531,7 +531,7 @@ use Core\Helper\WebService;
                     foreach ($vars['packages'] as $key => $value) {
                         ++$x;
                         $ex = explode(".", $value['goldProductPrice']);
-                        $decimals = sizeof($ex) == 1 ? 0 : strlen($ex[1]);
+                        $decimals = count($ex) == 1 ? 0 : strlen($ex[1]);
                         $price = number_format($value['goldProductPrice'], $decimals, '.', ',');
                         $price = $price . ' ' . $value['goldProductMoneyUnit'];
                         $pages[$page][] = addPackage($page,

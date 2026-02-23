@@ -83,7 +83,7 @@ class MultiAccount
         $tmp = $sameUIDs;
         $sameUIDs = [];
         $sameUIDs['results'] = $tmp;
-        $sameUIDs['total'] = sizeof($tmp);
+        $sameUIDs['total'] = count($tmp);
         $sameUIDs['totalActions'] = $totalActions;
         return $sameUIDs;
     }

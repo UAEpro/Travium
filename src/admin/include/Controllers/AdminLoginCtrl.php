@@ -10,8 +10,8 @@ class AdminLoginCtrl
     {
         $params['error'] = '';
         if (WebService::isPost() && isset($_POST['name'])) {
-            $username = filter_var(trim($_POST['name']), FILTER_SANITIZE_STRING);
-            $password = filter_var($_POST['pw'], FILTER_SANITIZE_STRING);
+            $username = sanitize_string(trim($_POST['name']));
+            $password = sanitize_string($_POST['pw']);
             if (empty($username) || empty($username)) {
                 $params['error'] = 'fill the form';
             } else if(recaptcha_check_answer()) {

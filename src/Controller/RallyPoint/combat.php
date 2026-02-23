@@ -144,7 +144,7 @@ class combat
                 }
             }
         }
-        if (!sizeof($this->output['defender']['races'])) {
+        if (!count($this->output['defender']['races'])) {
             $this->output['defender']['races'][$session->getRace()] = [
                 "unitsHTML" => "",
                 "units"     => array_fill(0,

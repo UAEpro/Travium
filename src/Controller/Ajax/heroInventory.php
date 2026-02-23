@@ -159,7 +159,7 @@ class heroInventory extends AjaxBase
     {
         if (!isset($_REQUEST['drid'])) return false;
         preg_match('/inventory_([0-9]+)/', $_REQUEST['drid'], $matches);
-        if (sizeof($matches) == 2) {
+        if (count($matches) == 2) {
             return $matches[1];
         }
         return false;

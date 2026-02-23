@@ -57,7 +57,7 @@ class ProfileCache
             return $cache;
         }
         $villages = (new ProfileModel())->getPlayerVillages($uid)->fetch_all(MYSQLI_ASSOC);
-        $this->setProfileEditVillages($uid, $villages, sizeof($villages));
+        $this->setProfileEditVillages($uid, $villages, count($villages));
         return $villages;
     }
     public function reValidateProfileVillages($uid)

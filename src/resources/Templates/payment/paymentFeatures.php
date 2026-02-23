@@ -21,7 +21,7 @@
         function buildFeature($featureName, $coins, $wwInAvailable, $delivery, $img='')
         {
             $featureName = explode("_", $featureName);
-            if (sizeof($featureName) == 2) {
+            if (count($featureName) == 2) {
                 $percent = $featureName[1];
             }
             $featureName = $featureName[0];

@@ -108,7 +108,7 @@ class BackupsCtrl
             $params['content'] .= '</tr>';
             $total_size += filesize($real_file);
         }
-        if (!sizeof($backups)) {
+        if (!count($backups)) {
             $params['content'] .= '<tr>';
             $params['content'] .= '<td colspan="5" class="noData" style="text-align: center">No backups up to now.</td>';
             $params['content'] .= '</tr>';

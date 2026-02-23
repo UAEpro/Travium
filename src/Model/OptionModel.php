@@ -61,7 +61,7 @@ class OptionModel
         return $db->fetchScalar("SELECT COUNT(id) FROM movement WHERE kid IN(" . implode(",", $kids) . ") AND mode=0");
     }
     public function doesNameMeetRequirements($currentName, $name){
-        $newName = filter_var($name, FILTER_SANITIZE_STRING);
+        $newName = sanitize_string($name);
         $error = 0;
         if($this->nameExists($newName) && !(strtolower($currentName) === strtolower($name))) {
             $error |= self::NAME_EXISTS;

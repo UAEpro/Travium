@@ -95,7 +95,7 @@ class SpeedCalculator
     public function setMinSpeed($minSpeed)
     {
         if (is_array($minSpeed)) {
-            if (sizeof($minSpeed) == 0) {
+            if (count($minSpeed) == 0) {
                 $minSpeed = 1;
             } else {
                 $minSpeed = min($minSpeed);

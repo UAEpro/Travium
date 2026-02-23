@@ -65,7 +65,7 @@ class Session
         }
         $uid = (int)$_SESSION[$this->fixSessionPrefix('uid')];
         $login = new LoginModel();
-        $result = $login->checkUserOrSitterLogin($uid, filter_var($_SESSION[$this->fixSessionPrefix('pw')], FILTER_SANITIZE_STRING));
+        $result = $login->checkUserOrSitterLogin($uid, (string)($_SESSION[$this->fixSessionPrefix('pw')] ?? ''));
         if ($result <> 1) {
             $this->increaseClicks();
             $this->isLoggedIn = TRUE;
@@ -90,7 +90,7 @@ class Session
 
     private function increaseClicks()
     {
-        $page = addslashes(filter_var(basename($_SERVER['PHP_SELF']), FILTER_SANITIZE_STRING));
+        $page = addslashes(sanitize_string(basename($_SERVER['PHP_SELF'])));
         if (in_array($page, ['map_block.php', 'map_mark.php', 'ajax.php', 'hero_head.php', 'hero_body.php', 'minimap.php'])) return;
         $sessionClicks = SessionVar::getVariable("sessionClicks", 0, 10);
         SessionVar::setVariable('sessionClicks', ++$sessionClicks, FALSE);

@@ -145,7 +145,7 @@ class BuildCtrl extends GameCtrl
         if ($category < 0) {
             $category = 1;
             do {
-                if (sizeof($this->getCategoryAvailableBuildings($category)['available'])) {
+                if (count($this->getCategoryAvailableBuildings($category)['available'])) {
                     break;
                 }
                 $category++;
@@ -179,13 +179,13 @@ class BuildCtrl extends GameCtrl
                 $content .= '<hr />';
             }
         }
-        if (sizeof($newBuilds['available']) === 0) {
+        if (count($newBuilds['available']) === 0) {
             $content .= '<div class="none">';
             $content .= T("Buildings", "no_building_available");
             $content .= "</div>";
         }
         if (!$noSoon && !in_array($this->selectedBuildingIndex, [39, 40,]) && !($village->isWW() && in_array($this->selectedBuildingIndex, [21, 26, 31, 31, 32, 99,]))) {
-            $x = sizeof($newBuilds['soon']);
+            $x = count($newBuilds['soon']);
             if ($x) {
                 $content .= '<h4 class="round spacer">' . T("Buildings", "soon_available") . '</h4>';
                 foreach ($newBuilds['soon'] as $item_id => $build) {
@@ -247,10 +247,10 @@ class BuildCtrl extends GameCtrl
         if (isset($multi['req']) && isset($multi['req']['multi']) && $multi['req']['multi'] == TRUE) {
             switch ($item_id) {
                 case 36:
-                    $data['count'] = sizeof($village->getTrapperLvls()) + 1;
+                    $data['count'] = count($village->getTrapperLvls()) + 1;
                     break;
                 case 23:
-                    $data['count'] = sizeof($village->getCrannyLvls()) + 1;
+                    $data['count'] = count($village->getCrannyLvls()) + 1;
                     break;
                 default:
                     for ($i = 19; $i <= 38; ++$i) {
@@ -463,7 +463,7 @@ class BuildCtrl extends GameCtrl
                 if (isset($_POST['ww_name']) && StringChecker::isValidName($_POST['ww_name'])) {
                     if (getDisplay("allowWWUnusualRename") || $village->getField($this->selectedBuildingIndex)['level'] <= 10) {
                         if (strlen($_POST['ww_name']) <= 20) {
-                            $wwName = $db->real_escape_string(filter_var($_POST['ww_name'], FILTER_SANITIZE_STRING));
+                            $wwName = $db->real_escape_string(sanitize_string($_POST['ww_name']));
                             $db->query("UPDATE fdata SET wwname='$wwName' WHERE kid=" . $this->session->getKid());
                         }
                     }
@@ -698,7 +698,7 @@ class BuildCtrl extends GameCtrl
         return PHPBatchView::render("build/buildingReadyWrapper", $contract);
     }
 
-    private function getValuesTable(&$contract, $params = [], callable $callback)
+    private function getValuesTable(&$contract, $params, callable $callback)
     {
         $contract['showValuesTable'] = TRUE;
         $contract['valueTable'] = '';
