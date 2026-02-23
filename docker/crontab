@@ -1,0 +1,3 @@
+# Travium cron jobs
+# Add game-specific cron tasks here as needed
+# Example: */5 * * * * www-data php /var/www/html/src/cron.php >> /var/log/cron.log 2>&1

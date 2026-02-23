@@ -2387,6 +2387,16 @@ if ($templateName == 'tpl/layout.tpl'): ?>
         addAdminChangeEventListener("needPreregistrationCode", "needPreregistrationCode");
         addAdminChangeEventListener("maintenance", "maintenance");
         addAdminChangeEventListener("registerClosed", "registerClosed");
+
+        var startTimeBtn = document.getElementById("startTimeBtn");
+        if (startTimeBtn) {
+            startTimeBtn.addEventListener("click", function () {
+                var val = document.getElementById("startTimeDT").value;
+                if (val) {
+                    document.location.href = "admin.php?action=configurationDetails&startTimeDT=" + encodeURIComponent(val);
+                }
+            });
+        }
     </script>
 <?php elseif ($templateName == 'tpl/troop_tbody.tpl'): ?>
     <tbody class="troops">

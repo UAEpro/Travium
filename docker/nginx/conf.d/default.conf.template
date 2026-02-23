@@ -1,0 +1,192 @@
+# ============================================================
+# Travium Nginx Configuration — Multi-subdomain routing
+# Domain is injected via DOMAIN env var (nginx envsubst)
+# ============================================================
+
+# Upstream PHP-FPM
+upstream php-fpm {
+    server php:9000;
+}
+
+# --- www (homepage) ---
+server {
+    listen 80;
+    server_name www.${DOMAIN} ${DOMAIN};
+
+    root /var/www/html/homepage;
+    index index.html index.htm;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    location ~ /\. { deny all; }
+}
+
+# --- game worlds (s1, s2, etc.) ---
+# Matches any <worldId>.<domain> that isn't a known subdomain
+server {
+    listen 80;
+    server_name ~^(?<worldid>[a-z0-9-]+)\.${DOMAIN}$;
+
+    root /var/www/html/servers/$worldid/public;
+    index index.php index.html;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        try_files $uri /index.php?$query_string;
+        fastcgi_pass php-fpm;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    location ~ /\. { deny all; }
+}
+
+# --- api (global + per-world: api.<domain> and api.<worldId>.<domain>) ---
+server {
+    listen 80;
+    server_name api.${DOMAIN} ~^api\..+\.${DOMAIN}$;
+
+    root /var/www/html/integrations/api;
+    index index.php;
+
+    location / {
+        try_files $uri /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        fastcgi_pass php-fpm;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    location ~ /\. { deny all; }
+}
+
+# --- cdn ---
+server {
+    listen 80;
+    server_name cdn.${DOMAIN};
+
+    root /var/www/html/integrations/cdn;
+    index index.php;
+
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ {
+        expires 30d;
+        add_header Cache-Control "public, immutable";
+        try_files $uri =404;
+    }
+
+    location / {
+        try_files $uri /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        fastcgi_pass php-fpm;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    location ~ /\. { deny all; }
+}
+
+# --- install ---
+server {
+    listen 80;
+    server_name install.${DOMAIN};
+
+    root /var/www/html/integrations/install;
+    index index.php;
+
+    location / {
+        try_files $uri /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        fastcgi_pass php-fpm;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    location ~ /\. { deny all; }
+}
+
+# --- voting ---
+server {
+    listen 80;
+    server_name voting.${DOMAIN};
+
+    root /var/www/html/integrations/voting;
+    index index.php;
+
+    location /include/ { deny all; }
+
+    location / {
+        try_files $uri /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        fastcgi_pass php-fpm;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    location ~ /\. { deny all; }
+}
+
+# --- admin (global admin panel) ---
+server {
+    listen 80;
+    server_name admin.${DOMAIN};
+
+    root /var/www/html/integrations/admin;
+    index index.php;
+
+    location /include/ { deny all; }
+
+    location / {
+        try_files $uri /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        fastcgi_pass php-fpm;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    location ~ /\. { deny all; }
+}
+
+# --- payment ---
+server {
+    listen 80;
+    server_name payment.${DOMAIN};
+
+    root /var/www/html/integrations/payment;
+    index index.php;
+
+    location /include/ { deny all; }
+
+    location / {
+        try_files $uri /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        fastcgi_pass php-fpm;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    location ~ /\. { deny all; }
+}

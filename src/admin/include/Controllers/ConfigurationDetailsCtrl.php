@@ -30,9 +30,11 @@ class ConfigurationDetailsCtrl
         $this->addInfo($params['content'], 'Map size', MAP_SIZE . 'x' . MAP_SIZE);
         $this->addInfo($params['content'], 'Min distance', round(Formulas::getMapMinDistanceFromCenter(), 1));
         $this->addInfo($params['content'], 'Storage multiplier', getGame("storage_multiplier"));
+        $startTimeUtc = gmdate('Y-m-d\TH:i', $config->game->start_time);
         $this->addInfo($params['content'],
-            'Start time',
-            TimezoneHelper::autoDateString($config->game->start_time, true));
+            'Start time (UTC)',
+            '<input type="datetime-local" id="startTimeDT" value="' . $startTimeUtc . '" style="margin-right:5px;">'
+            . '<button type="button" id="startTimeBtn" style="cursor:pointer;">Save</button>');
         $this->addInfo($params['content'],
             'Round age/length',
             round(getGameElapsedSeconds() / 86400,
@@ -264,6 +266,17 @@ class ConfigurationDetailsCtrl
             $state = $_GET['fakeAccountProcess'] == 'on' ? 1 : 0;
             $config->dynamic->fakeAccountProcess = $state;
             $db->query("UPDATE config SET fakeAccountProcess=$state");
+        } else if (isset($_GET['startTimeDT']) && $_GET['startTimeDT'] !== '') {
+            $dt = \DateTime::createFromFormat('Y-m-d\TH:i', $_GET['startTimeDT'], new \DateTimeZone('UTC'));
+            if ($dt !== false) {
+                $newStartTime = $dt->getTimestamp();
+                AdminLog::getInstance()->addLog("Changed server start time to " . gmdate('Y-m-d H:i', $newStartTime) . " UTC.");
+                $db->query("UPDATE config SET startTime=" . (int)$newStartTime);
+                $globalDB->query("UPDATE gameServers SET startTime=" . (int)$newStartTime . " WHERE id=" . getWorldUniqueId());
+                $config->dynamic->startTime = $newStartTime;
+                $config->game->start_time = $newStartTime;
+                Caching::getInstance()->delete("WorldConfig");
+            }
         }
     }
 

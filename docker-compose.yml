@@ -1,0 +1,107 @@
+services:
+  php:
+    build:
+      context: ./docker
+      dockerfile: Dockerfile
+    container_name: travium-php
+    restart: unless-stopped
+    volumes:
+      - .:/var/www/html
+    environment:
+      - DB_HOST=mysql
+      - REDIS_HOST=redis
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - DOMAIN=${DOMAIN}
+      - RECAPTCHA_PUBLIC_KEY=${RECAPTCHA_PUBLIC_KEY}
+      - RECAPTCHA_PRIVATE_KEY=${RECAPTCHA_PRIVATE_KEY}
+      - INSTALLER_KEY=${INSTALLER_KEY}
+      - VOTING_SECRET=${VOTING_SECRET}
+      - VOTING_GTOP100=${VOTING_GTOP100}
+      - VOTING_TOPG=${VOTING_TOPG}
+      - VOTING_ARENA=${VOTING_ARENA}
+      - MAILER_DRIVER=${MAILER_DRIVER}
+      - MAILER_FROM_NAME=${MAILER_FROM_NAME}
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASS=${SMTP_PASS}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_ENCRYPTION=${SMTP_ENCRYPTION}
+      - DEFAULT_LANGUAGE=${DEFAULT_LANGUAGE}
+      - DEFAULT_TIMEZONE=${DEFAULT_TIMEZONE}
+      - SESSION_TIMEOUT=${SESSION_TIMEOUT}
+      - GAME_DB_HOST=${GAME_DB_HOST:-mysql}
+      - GAME_DB_USER=${GAME_DB_USER:-${MYSQL_USER}}
+      - GAME_DB_PASSWORD=${GAME_DB_PASSWORD:-${MYSQL_PASSWORD}}
+      - GAME_ADMIN_PASSWORD=${GAME_ADMIN_PASSWORD:-}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin123}
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - travium
+
+  nginx:
+    image: nginx:alpine
+    container_name: travium-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    environment:
+      - DOMAIN=${DOMAIN}
+    volumes:
+      - .:/var/www/html
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./docker/nginx/conf.d/default.conf.template:/etc/nginx/templates/default.conf.template:ro
+    depends_on:
+      - php
+    networks:
+      - travium
+
+  mysql:
+    image: mariadb:11
+    container_name: travium-mysql
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+    volumes:
+      - travium-mysql:/var/lib/mysql
+      - ./docker/init-db:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - travium
+
+  redis:
+    image: redis:7-alpine
+    container_name: travium-redis
+    restart: unless-stopped
+    volumes:
+      - travium-redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - travium
+
+volumes:
+  travium-mysql:
+  travium-redis:
+
+networks:
+  travium:
+    driver: bridge
