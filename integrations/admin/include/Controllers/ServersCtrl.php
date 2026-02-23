@@ -29,6 +29,8 @@ class ServersCtrl
         switch ($section) {
             case 'create':
                 return $this->handleCreate();
+            case 'edit':
+                return $this->handleEdit();
             case 'toggle':
                 return $this->handleToggle();
             case 'checkWorld':
@@ -88,8 +90,9 @@ class ServersCtrl
                     </td>
                     <td><a href="<?= h($w['gameWorldUrl']) ?>" target="_blank"><?= h($w['gameWorldUrl']) ?></a></td>
                     <td><?= formatTime((int)$w['startTime']) ?></td>
-                    <td><?= (int)$w['roundLength'] ?>d</td>
+                    <td><?= (int)$w['roundLength'] ?>d (ends <?= gmdate('Y-m-d H:i', (int)$w['startTime'] + (int)$w['roundLength'] * 86400) ?> UTC)</td>
                     <td>
+                        <a class="ga-btn" href="index.php?action=servers&section=edit&id=<?= (int)$w['id'] ?>">Edit Times</a>
                         <a class="ga-btn ga-btn-primary" href="index.php?action=world&world=<?= urlencode($w['worldId']) ?>&worldAction=main">Manage</a>
                         <?php if (!$w['finished']): ?>
                             <a class="ga-btn ga-btn-danger" href="index.php?action=servers&section=toggle&id=<?= (int)$w['id'] ?>&field=finished&value=1&_csrf=<?= urlencode(csrfToken()) ?>"
@@ -108,6 +111,131 @@ class ServersCtrl
             <?php endforeach; ?>
             </tbody>
         </table>
+        <?php
+        return ob_get_clean();
+    }
+
+    /**
+     * Edit start time and round length for a game world.
+     */
+    private function handleEdit(): string
+    {
+        $id = (int)($_GET['id'] ?? 0);
+        if (!$id) {
+            header('Location: index.php?action=servers');
+            exit;
+        }
+
+        $stmt = $this->db->prepare('SELECT * FROM gameServers WHERE id = :id LIMIT 1');
+        $stmt->execute([':id' => $id]);
+        $world = $stmt->fetch();
+
+        if (!$world) {
+            header('Location: index.php?action=servers');
+            exit;
+        }
+
+        $errors = [];
+        $success = false;
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && csrfValidate()) {
+            $startTimeDT  = trim((string)($_POST['startTimeDT'] ?? ''));
+            $roundLength  = (int)($_POST['roundLength'] ?? 0);
+
+            // Validate start time
+            $dt = DateTime::createFromFormat('Y-m-d\TH:i', $startTimeDT, new DateTimeZone('UTC'));
+            if ($dt === false) {
+                $errors[] = 'Invalid start time.';
+            }
+            if ($roundLength <= 0) {
+                $errors[] = 'Round length must be a positive number of days.';
+            }
+
+            if (!$errors) {
+                $startTs = $dt->getTimestamp();
+
+                // Update gameServers table
+                $upd = $this->db->prepare('UPDATE gameServers SET startTime = :start, roundLength = :length WHERE id = :id');
+                $upd->execute([':start' => $startTs, ':length' => $roundLength, ':id' => $id]);
+
+                // Sync per-world config DB
+                $connectionFile = $world['configFileLocation'];
+                if ($connectionFile && file_exists($connectionFile)) {
+                    try {
+                        // Read the world's connection info (same pattern as WorldProxyCtrl)
+                        $connection = [];
+                        // Use a closure to isolate the require scope
+                        (function () use ($connectionFile, &$connection) {
+                            require $connectionFile;
+                        })();
+
+                        if (!empty($connection['database'])) {
+                            $dbConf = $connection['database'];
+                            $worldPdo = new PDO(
+                                sprintf('mysql:host=%s;dbname=%s;charset=%s',
+                                    $dbConf['hostname'], $dbConf['database'], $dbConf['charset'] ?? 'utf8mb4'),
+                                $dbConf['username'],
+                                $dbConf['password'],
+                                [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
+                            );
+                            $worldPdo->prepare('UPDATE config SET startTime = :ts')
+                                     ->execute([':ts' => $startTs]);
+                        }
+                    } catch (Throwable $e) {
+                        $errors[] = 'gameServers updated, but per-world config sync failed: ' . $e->getMessage();
+                    }
+                }
+
+                if (!$errors) {
+                    $success = true;
+                    // Re-fetch to show updated values
+                    $stmt->execute([':id' => $id]);
+                    $world = $stmt->fetch();
+                }
+            }
+        }
+
+        $currentStartDT = gmdate('Y-m-d\TH:i', (int)$world['startTime']);
+        $currentRoundLength = (int)$world['roundLength'];
+        $endTime = (int)$world['startTime'] + $currentRoundLength * 86400;
+
+        ob_start();
+        ?>
+        <h1>Edit Times — <?= h($world['name']) ?> (<?= h($world['worldId']) ?>)</h1>
+        <p><a href="index.php?action=servers">&laquo; Back to list</a></p>
+
+        <?php if ($errors): ?>
+            <div class="ga-msg ga-msg-err">
+                <ul><?php foreach ($errors as $e): ?><li><?= h($e) ?></li><?php endforeach; ?></ul>
+            </div>
+        <?php endif; ?>
+
+        <?php if ($success): ?>
+            <div class="ga-msg ga-msg-ok"><strong>Times updated successfully.</strong></div>
+        <?php endif; ?>
+
+        <form method="post" class="ga-form">
+            <input type="hidden" name="_csrf" value="<?= h(csrfToken()) ?>">
+
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; max-width:700px;">
+                <div>
+                    <label>Start Time (UTC)</label>
+                    <input name="startTimeDT" type="datetime-local" value="<?= h($currentStartDT) ?>" required>
+                </div>
+                <div>
+                    <label>Round Length (days)</label>
+                    <input name="roundLength" type="number" min="1" value="<?= $currentRoundLength ?>" required>
+                </div>
+                <div>
+                    <label>Computed End Time</label>
+                    <input type="text" value="<?= gmdate('Y-m-d H:i', $endTime) ?> UTC" readonly style="background:#eee;">
+                </div>
+            </div>
+
+            <div style="margin:20px 0;">
+                <button class="ga-btn ga-btn-primary" type="submit">Save Changes</button>
+            </div>
+        </form>
         <?php
         return ob_get_clean();
     }
