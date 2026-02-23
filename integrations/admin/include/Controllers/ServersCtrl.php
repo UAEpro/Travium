@@ -163,11 +163,9 @@ class ServersCtrl
                 if ($connectionFile && file_exists($connectionFile)) {
                     try {
                         // Read the world's connection info (same pattern as WorldProxyCtrl)
-                        $connection = [];
-                        // Use a closure to isolate the require scope
-                        (function () use ($connectionFile, &$connection) {
-                            require $connectionFile;
-                        })();
+                        // connection.php uses "global $connection;" so we must match that
+                        global $connection;
+                        require $connectionFile;
 
                         if (!empty($connection['database'])) {
                             $dbConf = $connection['database'];
