@@ -236,7 +236,11 @@ use Core\Helper\WebService;
             jQuery(".resultBox #packageGoldAmount .goldUnits").html(jQuery(".package.selected .goldUnits").html());
             jQuery(".resultBox #goldBalanceNew").html((parseInt(jQuery(".package.selected .goldUnits").html()) + parseInt(jQuery(".accountBalance span").html())));
             jQuery(".resultBox #priceToPay").html(jQuery(".package.selected .price").html());
-            if (jQuery("#paymentMethodsSlider .methodItem.selected")[0]) {
+            // In native app, no provider selection needed - enable buy button when package selected
+            if (window.isNativeApp && window.isAppleIAP) {
+                jQuery(".resultBox .inactiveButton").addClass("hide");
+                jQuery(".resultBox .activeButton").removeClass("hide");
+            } else if (jQuery("#paymentMethodsSlider .methodItem.selected")[0]) {
                 jQuery(".resultBox .inactiveButton").addClass("hide");
                 jQuery(".resultBox .activeButton").removeClass("hide")
             } else {
@@ -433,6 +437,17 @@ use Core\Helper\WebService;
         this.buyNowAction = function () {
             if (jQuery("#overview .resultBox .inactiveButton.hide")[0]) {
                 var e = parseInt(jQuery(".package.selected input.goldProductId").val());
+
+                // Native app Apple IAP: bypass web payment flow
+                if (window.isNativeApp && window.isAppleIAP && window.nativeBuyGold) {
+                    var goldAmount = parseInt(jQuery(".package.selected .goldUnits").html());
+                    var appleProductId = 'com.travium.gold.' + goldAmount;
+                    var worldId = Travian.Game.worldId || '<?=\Core\Config::getProperty("settings", "worldUniqueId");?>';
+                    var uid = <?=\Core\Session::getInstance()->getPlayerId();?>;
+                    window.nativeBuyGold(appleProductId, e, worldId, uid);
+                    return;
+                }
+
                 var b = parseInt(jQuery("#paymentMethodsSlider .methodItem.selected input.providerId").val());
                 var d = 800;
                 var f = 600;
@@ -566,7 +581,7 @@ use Core\Helper\WebService;
             </div>
         </div>
     </div>
-    <div id="paymentMethodsSlider"><h1><?= T("PaymentWizard", "Payment methods"); ?></h1>
+    <div id="paymentMethodsSlider" class="nativeAppHideable"><h1><?= T("PaymentWizard", "Payment methods"); ?></h1>
         <div class="loading"></div>
         <div class="slideArea area1">
             <div class="arrowL inactive"></div>
@@ -803,4 +818,31 @@ use Core\Helper\WebService;
             });
         </script>
     </div>
+    <script type="text/javascript">
+        // Hide payment methods slider when running inside the native app
+        // (Apple IAP replaces external payment providers)
+        if (window.isNativeApp && window.isAppleIAP) {
+            jQuery(function() {
+                jQuery('#paymentMethodsSlider.nativeAppHideable').hide();
+                // Also hide location selector (Apple IAP is global)
+                jQuery('.buyGoldLocation').closest('div').hide();
+            });
+            // Handle purchase result callbacks from native app
+            window.onNativePurchaseSuccess = function(goldAwarded, transactionId) {
+                var dialog = new Travian.Dialog.Dialog({
+                    preventFormSubmit: true,
+                    buttonOk: true,
+                    overlayCancel: false,
+                    onOkay: function() { window.location.reload(); }
+                });
+                dialog.setContent('<?=T("PaymentWizard", "Success");?>! +' + goldAwarded + ' <?=T("PaymentWizard", "Gold");?>');
+                dialog.show();
+            };
+            window.onNativePurchaseFailed = function(error) {
+                var dialog = new Travian.Dialog.Dialog({ preventFormSubmit: true });
+                dialog.setContent('<?=T("PaymentWizard", "An error occurred The payment system is not available at the moment Please try again later");?>');
+                dialog.show();
+            };
+        }
+    </script>
 </div>

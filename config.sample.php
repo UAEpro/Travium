@@ -53,6 +53,11 @@ $globalConfig['mailer'] = [
 // Installer key
 $globalConfig['installer_key'] = 'INIT_INSTALLER_SECRET_KEY';
 
+// Apple In-App Purchase
+$globalConfig['apple'] = [
+    'sharedSecret' => 'INIT_APPLE_SHARED_SECRET', // App Store Connect > App > In-App Purchases > App-Specific Shared Secret
+];
+
 /* Optional configurations */
 
 // Locale and formatting

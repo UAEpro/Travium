@@ -7,6 +7,7 @@ class ProviderEnum
     const PAYPAL = 2;
     const PAYGOL = 4;
     const ARIANPAL = 9;
+    const APPLE_IAP = 10;
 
     public static function toString($enum)
     {
@@ -19,6 +20,8 @@ class ProviderEnum
                 return 'PayGol';
             case self::ARIANPAL:
                 return 'Arianpal';
+            case self::APPLE_IAP:
+                return 'Apple IAP';
         }
         return 'Unknown';
     }
