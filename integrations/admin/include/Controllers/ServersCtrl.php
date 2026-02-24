@@ -61,6 +61,7 @@ class ServersCtrl
                     <th>World ID</th>
                     <th>Name</th>
                     <th>Speed</th>
+                    <th>Style</th>
                     <th>Status</th>
                     <th>URL</th>
                     <th>Start</th>
@@ -70,7 +71,7 @@ class ServersCtrl
             </thead>
             <tbody>
             <?php if (empty($worlds)): ?>
-                <tr><td colspan="9" style="text-align:center; padding:20px; color:#888;">No game worlds yet.</td></tr>
+                <tr><td colspan="10" style="text-align:center; padding:20px; color:#888;">No game worlds yet.</td></tr>
             <?php endif; ?>
             <?php foreach ($worlds as $w): ?>
                 <tr>
@@ -78,6 +79,10 @@ class ServersCtrl
                     <td><b><?= h($w['worldId']) ?></b></td>
                     <td><?= h($w['name']) ?></td>
                     <td><?= (int)$w['speed'] ?>x</td>
+                    <td>
+                        <?php $style = isset($w['serverStyle']) ? $w['serverStyle'] : 'modern'; ?>
+                        <span class="ga-badge <?= $style === 'classic' ? 'ga-badge-yellow' : 'ga-badge-blue' ?>"><?= ucfirst(h($style)) ?></span>
+                    </td>
                     <td>
                         <?php if ($w['finished']): ?>
                             <span class="ga-badge ga-badge-red">Finished</span>
@@ -327,6 +332,7 @@ class ServersCtrl
             'activation'                 => 0,
             'auto_reinstall'             => 0,
             'auto_reinstall_start_after' => 86400,
+            'serverStyle'                => 'modern',
             'startTimeDT'                => (new DateTime('+1 hour', new DateTimeZone('UTC')))->format('Y-m-d\TH:i'),
             'admin_password'             => getenv('GAME_ADMIN_PASSWORD') ?: '',
         ];
@@ -363,6 +369,7 @@ class ServersCtrl
                 'activation'              => (int)!!$g('activation', $defaults['activation']),
                 'auto_reinstall'          => (int)!!$g('auto_reinstall', $defaults['auto_reinstall']),
                 'auto_reinstall_start_after' => (int)$g('auto_reinstall_start_after', $defaults['auto_reinstall_start_after']),
+                'serverStyle'             => in_array($g('serverStyle', 'modern'), ['modern', 'classic']) ? $g('serverStyle', 'modern') : 'modern',
                 'admin_password'          => (string)$g('admin_password', ''),
                 'startTimeDT'             => (string)$g('startTimeDT', $defaults['startTimeDT']),
             ];
@@ -508,6 +515,15 @@ class ServersCtrl
                 <div>
                     <label>Admin Password (Multihunter)</label>
                     <input name="admin_password" type="password" value="<?= h($defaults['admin_password']) ?>">
+                </div>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin:10px 0;">
+                <div>
+                    <label>Server Style</label>
+                    <select name="serverStyle">
+                        <option value="modern" <?= $defaults['serverStyle'] === 'modern' ? 'selected' : '' ?>>Modern (T4.5)</option>
+                        <option value="classic" <?= $defaults['serverStyle'] === 'classic' ? 'selected' : '' ?>>Classic (T3.6)</option>
+                    </select>
                 </div>
             </div>
             <div style="margin:10px 0; display:grid; grid-template-columns:repeat(3,1fr); gap:8px;">
@@ -670,8 +686,8 @@ class ServersCtrl
         $stmt = $this->db->prepare("
             INSERT INTO `gameServers`
             (`worldId`,`speed`,`name`,`version`,`gameWorldUrl`,`startTime`,`roundLength`,
-             `preregistration_key_only`,`promoted`,`hidden`,`configFileLocation`,`activation`)
-            VALUES (:worldId,:speed,:name,0,:url,:start,:length,:preKey,:promoted,:hidden,:cfg,:activation)
+             `preregistration_key_only`,`promoted`,`hidden`,`configFileLocation`,`activation`,`serverStyle`)
+            VALUES (:worldId,:speed,:name,0,:url,:start,:length,:preKey,:promoted,:hidden,:cfg,:activation,:serverStyle)
         ");
         $stmt->execute([
             ':worldId'   => $input['worldId'],
@@ -685,6 +701,7 @@ class ServersCtrl
             ':hidden'    => $input['serverHidden'],
             ':cfg'       => $connectionFile,
             ':activation' => $input['activation'],
+            ':serverStyle' => $input['serverStyle'],
         ]);
         $worldUniqueId = (int)$this->db->lastInsertId();
 
@@ -693,11 +710,13 @@ class ServersCtrl
             '[SETTINGS_WORLD_ID]', '[SETTINGS_WORLD_UNIQUE_ID]', '[GAME_SPEED]',
             '[GAME_START_TIME]', '[GAME_ROUND_LENGTH]', '[SECURE_HASH_CODE]',
             '[AUTO_REINSTALL]', '[AUTO_REINSTALL_START_AFTER]', '[ENGINE_FILENAME]',
+            '[SERVER_STYLE]',
         ];
         $order2_values = [
             $input['worldId'], $worldUniqueId, $input['speed'], $startTs,
             $input['roundLength'], md5(sha1(microtime())),
             $input['auto_reinstall'], $input['auto_reinstall_start_after'], $processName,
+            $input['serverStyle'],
         ];
         $connection_content = str_replace($order2, $order2_values, $connection_content);
         file_put_contents($connectionFile, $connection_content);

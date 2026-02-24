@@ -92,7 +92,8 @@ CREATE TABLE `gameServers` (
   `preregistration_key_only` tinyint(1) UNSIGNED NOT NULL DEFAULT 0,
   `hidden` tinyint(1) UNSIGNED NOT NULL DEFAULT 0,
   `promoted` tinyint(1) UNSIGNED NOT NULL DEFAULT 0,
-  `configFileLocation` varchar(500) NOT NULL
+  `configFileLocation` varchar(500) NOT NULL,
+  `serverStyle` varchar(20) NOT NULL DEFAULT 'modern'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `goldProducts` (

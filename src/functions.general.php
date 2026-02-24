@@ -629,9 +629,14 @@ function get_gpack_cdn_base_url_with_protocol()
 function get_gpack_version($default = false)
 {
     global $globalConfig;
+
+    // Check if this server uses the classic style
+    if (get_server_style() === 'classic') {
+        return 'TravianOld';
+    }
+
     $gpack_version = $globalConfig['staticParameters']['gpacks']['default'];
 
-    return $gpack_version;
     if (!$default) {
         $gpackList = $globalConfig['staticParameters']['gpacks']['list'];
         if (isset($_COOKIE['travian_gpack_hash'])) {
@@ -641,6 +646,24 @@ function get_gpack_version($default = false)
         }
     }
     return $gpack_version;
+}
+
+function get_server_style()
+{
+    try {
+        $config = \Core\Config::getInstance();
+        if (isset($config->settings->serverStyle)) {
+            return $config->settings->serverStyle;
+        }
+    } catch (\Throwable $e) {
+        // Config not loaded yet, fall through
+    }
+    return 'modern';
+}
+
+function is_classic_server()
+{
+    return get_server_style() === 'classic';
 }
 
 function set_gpack_version($gpack_version)
@@ -659,7 +682,6 @@ function get_gpack_cdn_url($default = false)
 
 function get_gpack_cdn_mainPage_url($default = false)
 {
-    return get_gpack_cdn_base_url() . 'a17a8f72/mainPage/';
     return get_gpack_cdn_base_url() . get_gpack_version($default) . '/mainPage/';
 }
 

@@ -74,6 +74,7 @@ $defaults = [
     'activation'              => 0,
     'auto_reinstall'          => 0,
     'auto_reinstall_start_after' => 86400,
+    'serverStyle'             => 'modern',
     'startTimeDT'             => (new DateTime('+1 hour'))->format('Y-m-d\TH:i'),
     'admin_password'          => getenv('GAME_ADMIN_PASSWORD') ?: '',
 ];
@@ -130,6 +131,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'activation'              => (int)!!$g('activation', $defaults['activation']),
         'auto_reinstall'          => (int)!!$g('auto_reinstall', $defaults['auto_reinstall']),
         'auto_reinstall_start_after' => (int)$g('auto_reinstall_start_after', $defaults['auto_reinstall_start_after']),
+        'serverStyle'             => in_array($g('serverStyle', 'modern'), ['modern', 'classic']) ? $g('serverStyle', 'modern') : 'modern',
         'admin_password'          => (string)$g('admin_password', ''),
         'startTimeDT'             => (string)$g('startTimeDT', $defaults['startTimeDT']),
     ];
@@ -289,14 +291,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 '[AUTO_REINSTALL]',
                 '[AUTO_REINSTALL_START_AFTER]',
                 '[ENGINE_FILENAME]',
+                '[SERVER_STYLE]',
             ];
 
             // Insert row in gameServers using PREPARED statement to fix silent failures
             $stmt = $globalDB->prepare("
                 INSERT INTO `gameServers`
                 (`worldId`,`speed`,`name`,`version`,`gameWorldUrl`,`startTime`,`roundLength`,
-                 `preregistration_key_only`,`promoted`,`hidden`,`configFileLocation`,`activation`)
-                VALUES (:worldId,:speed,:name,0,:url,:start,:length,:preKey,:promoted,:hidden,:cfg,:activation)
+                 `preregistration_key_only`,`promoted`,`hidden`,`configFileLocation`,`activation`,`serverStyle`)
+                VALUES (:worldId,:speed,:name,0,:url,:start,:length,:preKey,:promoted,:hidden,:cfg,:activation,:serverStyle)
             ");
             $stmt->execute([
                 ':worldId'   => $input['worldId'],
@@ -310,6 +313,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ':hidden'    => $input['serverHidden'],
                 ':cfg'       => $connectionFile,
                 ':activation'=> $input['activation'],
+                ':serverStyle' => $input['serverStyle'],
             ]);
             $worldUniqueId = (int)$globalDB->lastInsertId();
 
@@ -323,7 +327,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 md5(sha1(microtime())),
                 $input['auto_reinstall'],
                 $input['auto_reinstall_start_after'], // mind the correct key name
-                $processName
+                $processName,
+                $input['serverStyle'],
             ];
             $connection_content = str_replace($order, $order_values, $connection_content);
             file_put_contents($connectionFile, $connection_content);
@@ -700,6 +705,14 @@ function run_cmd(string $cmd): array {
                             <input name="auto_reinstall_start_after" type="number" min="0" step="1" value="<?=htmlspecialchars((string)($_POST['auto_reinstall_start_after'] ?? $defaults['auto_reinstall_start_after']))?>">
                         </div>
                     </div>
+
+                    <label>Server Style</label>
+                    <select name="serverStyle">
+                        <?php $currentStyle = $_POST['serverStyle'] ?? $defaults['serverStyle']; ?>
+                        <option value="modern" <?= $currentStyle === 'modern' ? 'selected' : '' ?>>Modern (T4.5)</option>
+                        <option value="classic" <?= $currentStyle === 'classic' ? 'selected' : '' ?>>Classic (T3.6)</option>
+                    </select>
+                    <div class="hint">Modern uses T4.5 graphics, Classic uses T3.6 retro style</div>
 
                     <label>Admin password</label>
                     <input name="admin_password" type="password" value="<?=htmlspecialchars($_POST['admin_password'] ?? $defaults['admin_password'])?>">

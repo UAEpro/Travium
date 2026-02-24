@@ -11,6 +11,7 @@ $connection = [
     'auto_reinstall' => '[AUTO_REINSTALL]',
     'auto_reinstall_start_after' => '[AUTO_REINSTALL_START_AFTER]',
     'engine_filename' => '[ENGINE_FILENAME]',
+    'serverStyle' => '[SERVER_STYLE]',
     'database' => [
         'hostname' => '[DATABASE_HOST]',
         'username' => '[DATABASE_USERNAME]',

@@ -69,6 +69,7 @@ class DashboardCtrl
                     <th>World ID</th>
                     <th>Name</th>
                     <th>Speed</th>
+                    <th>Style</th>
                     <th>Status</th>
                     <th>Registration</th>
                     <th>Start Time</th>
@@ -78,7 +79,7 @@ class DashboardCtrl
             </thead>
             <tbody>
             <?php if (empty($worlds)): ?>
-                <tr><td colspan="9" style="text-align:center; padding:20px; color:#888;">No game worlds found. <a href="index.php?action=servers">Create one</a>.</td></tr>
+                <tr><td colspan="10" style="text-align:center; padding:20px; color:#888;">No game worlds found. <a href="index.php?action=servers">Create one</a>.</td></tr>
             <?php endif; ?>
             <?php foreach ($worlds as $w): ?>
                 <tr>
@@ -86,6 +87,10 @@ class DashboardCtrl
                     <td><b><?= h($w['worldId']) ?></b></td>
                     <td><?= h($w['name']) ?></td>
                     <td><?= (int)$w['speed'] ?>x</td>
+                    <td>
+                        <?php $style = isset($w['serverStyle']) ? $w['serverStyle'] : 'modern'; ?>
+                        <span class="ga-badge <?= $style === 'classic' ? 'ga-badge-yellow' : 'ga-badge-blue' ?>"><?= ucfirst(h($style)) ?></span>
+                    </td>
                     <td>
                         <?php if ($w['finished']): ?>
                             <span class="ga-badge ga-badge-red">Finished</span>
