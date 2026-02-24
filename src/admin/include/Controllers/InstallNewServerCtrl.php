@@ -488,8 +488,9 @@ class InstallNewServerCtrl
         $this->vars['formData']['instantFinishTraining'] = isset($_POST['instantFinishTraining']) && $_POST['instantFinishTraining'] == 1 ? 1 : 0;
         $this->vars['formData']['needPreregistrationCode'] = isset($_POST['needPreregistrationCode']) && $_POST['needPreregistrationCode'] == 1 ? 1 : 0;
         if (isset($_POST['serverStyle'])) {
-            $this->vars['formData']['serverStyle'] = trim($_POST['serverStyle']);
-            if (!in_array($_POST['serverStyle'], array_keys($this->vars['data']['serverStyle']))) {
+            $serverStyle = trim($_POST['serverStyle']);
+            $this->vars['formData']['serverStyle'] = $serverStyle;
+            if (!in_array($serverStyle, array_keys($this->vars['data']['serverStyle']))) {
                 $this->vars['errors'][] = 'Server style is invalid.';
                 $errors++;
             }

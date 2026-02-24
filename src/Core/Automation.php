@@ -1039,6 +1039,7 @@ class Automation
             'activation' => true,
             'auto_reinstall' => $config->timers->auto_reinstall,
             'auto_reinstall_start_after' => $config->timers->auto_reinstall_start_after,
+            'serverStyle' => isset($config->settings->serverStyle) ? $config->settings->serverStyle : 'modern',
             'startTime' => $newStartTime,
         ];
         TaskQueue::addTask(TaskQueue::TASK_INSTALL, $data, "Installing server $worldId");

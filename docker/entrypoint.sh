@@ -55,15 +55,21 @@ if [ -d "$MIGRATIONS_DIR" ]; then
 
         if [ "$ALREADY_APPLIED" = "0" ]; then
             echo "    Applying migration: $MIGRATION_FILE"
-            if mysql -h "$DB_HOST" -u "${MYSQL_USER}" -p"${MYSQL_PASSWORD}" "${MYSQL_DATABASE}" < "$migration" 2>/dev/null; then
+            MIGRATION_OUTPUT=$(mysql -h "$DB_HOST" -u "${MYSQL_USER}" -p"${MYSQL_PASSWORD}" "${MYSQL_DATABASE}" < "$migration" 2>&1)
+            MIGRATION_EXIT=$?
+            if [ $MIGRATION_EXIT -eq 0 ]; then
                 mysql -h "$DB_HOST" -u "${MYSQL_USER}" -p"${MYSQL_PASSWORD}" "${MYSQL_DATABASE}" -e \
                     "INSERT INTO schema_migrations (filename) VALUES ('$MIGRATION_FILE')" 2>/dev/null
                 echo "    Applied: $MIGRATION_FILE"
             else
-                echo "    Skipped (already applied or error): $MIGRATION_FILE"
-                # Still mark as applied if the change already exists (e.g., fresh install from maindb.sql)
-                mysql -h "$DB_HOST" -u "${MYSQL_USER}" -p"${MYSQL_PASSWORD}" "${MYSQL_DATABASE}" -e \
-                    "INSERT IGNORE INTO schema_migrations (filename) VALUES ('$MIGRATION_FILE')" 2>/dev/null
+                # Check if the error is because the change already exists (e.g., fresh install from maindb.sql)
+                if echo "$MIGRATION_OUTPUT" | grep -qi "duplicate\|already exists"; then
+                    mysql -h "$DB_HOST" -u "${MYSQL_USER}" -p"${MYSQL_PASSWORD}" "${MYSQL_DATABASE}" -e \
+                        "INSERT IGNORE INTO schema_migrations (filename) VALUES ('$MIGRATION_FILE')" 2>/dev/null
+                    echo "    Skipped (already applied): $MIGRATION_FILE"
+                else
+                    echo "    ERROR applying migration $MIGRATION_FILE: $MIGRATION_OUTPUT"
+                fi
             fi
         fi
     done
